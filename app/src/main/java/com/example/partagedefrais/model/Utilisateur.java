@@ -78,4 +78,28 @@ public class Utilisateur {
     public void setDepenses(List<Depense> depenses) {
         this.depenses = depenses;
     }
+
+    /**
+     * Calcul de la somme des dépenses de l'utilisateur
+     * @return somme des dépenses
+     */
+    public double sommeDepense() {
+        double somme = 0.0;
+        for (Depense depense: depenses) {
+            somme = somme + depense.getMontant();
+        }
+        return somme;
+    }
+
+    /**
+     * Calcul du solde de l'utilisateur pour le voyage
+     * @param partDepenseVoyage part de l'utilisateur pour les dépenses du voyage
+     * Cas 1 : renvoie d'un résultat négatif donc l'utilisateur doit de l'argent
+     * Cas 2 : renvoie d'un résultat positif donc l'utilisateur à dépensé plus que ça part pour le voyage
+     * Cas 3 : renvoie de 0 donc l'utilisateur a payé ça part pour les dépenses du voyage
+     * @return solde de l'utilisateur
+     */
+    public double soldeUtilisateur(double partDepenseVoyage) {
+        return sommeDepense() - partDepenseVoyage;
+    }
 }
