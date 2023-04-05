@@ -2,7 +2,7 @@
  * IUT Rodez, No copyright
  */
 
-package com.example.partagedefrais;
+package com.example.partagedefrais.model;
 
 /**
  *

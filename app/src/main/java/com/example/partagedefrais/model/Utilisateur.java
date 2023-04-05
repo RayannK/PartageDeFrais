@@ -1,7 +1,9 @@
 /* Utilisateur.java                                               05 avr. 2023
  * IUT Rodez, no copyright
  */
-package com.example.partagedefrais;
+package com.example.partagedefrais.model;
+
+import com.example.partagedefrais.model.Depense;
 
 import java.util.List;
 
