@@ -5,6 +5,7 @@ package com.example.partagedefrais.model;
 
 import com.example.partagedefrais.model.Depense;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,6 +29,19 @@ public class Utilisateur {
      */
     public Utilisateur(long id) {
         this.id = id;
+        this.prenom = null;
+        this.depenses = new ArrayList<>();
+    }
+
+    /**
+     * Initialisation d'un Utilisateur
+     * @param id identifiant de l'utilisateur dans la table qui le contient
+     * @param prenom prénom de l'utilisateur ayant effectuer la dépense
+     */
+    public Utilisateur(long id, String prenom) {
+        this.id = id;
+        this.prenom = prenom;
+        this.depenses = new ArrayList<>();
     }
 
     /**

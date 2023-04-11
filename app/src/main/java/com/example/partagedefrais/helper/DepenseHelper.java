@@ -35,11 +35,34 @@ public class DepenseHelper extends SQLiteOpenHelper {
             + CLE + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + NOM + " TEXT, "
             + MONTANT + " TEXT, "
-            + CLE_UTILISATEUR + " INTEGER); ";
+            + CLE_UTILISATEUR + " INTEGER, "
+            + "FOREIGN KEY("+CLE_UTILISATEUR+") REFERENCES "+UtilisateurHelper.NOM_TABLE+"("+UtilisateurHelper.CLE+")); ";
 
     /** Requete pour supprimer la table */
     private static final String SUPPRIMER_TABLE =
             "DROP TABLE IF EXISTS " + NOM_TABLE + " ;" ;
+
+    /**
+     * Instance de UtilisateurHelper : elle sera unique au sein de l'application
+     */
+    private static DepenseHelper instanceDepenseHelper;
+
+    /**
+     * Création si besoin d'une instance de type DepenseHelper, et renvoie de celle-ci
+     * @param context contexte de l'activité à l'origine de l'appel
+     * @return une instance de type DepenseHelper pour accéder ensuite à la base de données
+     */
+    public static synchronized DepenseHelper getInstance(Context context,
+                                                             String nom,
+                                                             SQLiteDatabase.CursorFactory fabrique,
+                                                             int version) {
+        if (instanceDepenseHelper == null) {
+            // l'instance n'existe pas encore : on la crée
+            instanceDepenseHelper = new DepenseHelper(
+                    context.getApplicationContext(), nom, fabrique, version);
+        }
+        return instanceDepenseHelper;
+    }
 
     /**
      * Constructeur de la classe
@@ -48,7 +71,7 @@ public class DepenseHelper extends SQLiteOpenHelper {
      * @param fabrique une fabrique de curseur ou le plus souvent null
      * @param version entier égal au numéro de version du schéma de la base de données
      */
-    public DepenseHelper(Context contexte, String nom, SQLiteDatabase.CursorFactory fabrique, int version) {
+    private DepenseHelper(Context contexte, String nom, SQLiteDatabase.CursorFactory fabrique, int version) {
         super(contexte, nom, fabrique, version);
     }
 
