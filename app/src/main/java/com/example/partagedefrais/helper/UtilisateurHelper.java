@@ -3,6 +3,7 @@
  */
 package com.example.partagedefrais.helper;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -81,6 +82,16 @@ public class UtilisateurHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase base) {
         // exécution de la requête pour créer la base
         base.execSQL(CREATION_TABLE);
+
+        ContentValues enregistrement = new ContentValues();
+        enregistrement.put(UtilisateurHelper.PRENOM, "Jonny");
+        // insertion de l'enregistrement dans la base
+        base.insert(UtilisateurHelper.NOM_TABLE, UtilisateurHelper.PRENOM, enregistrement);
+
+        enregistrement.put(UtilisateurHelper.PRENOM, "Albert");
+        // insertion de l'enregistrement dans la base
+        base.insert(UtilisateurHelper.NOM_TABLE, UtilisateurHelper.PRENOM, enregistrement);
+
     }
 
     @Override

@@ -79,6 +79,26 @@ public class DepenseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase base) {
         // exécution de la requête pour créer la base
         base.execSQL(CREATION_TABLE);
+
+        ContentValues enregistrement = new ContentValues();
+        enregistrement.put(DepenseHelper.NOM, "bar");
+        enregistrement.put(DepenseHelper.MONTANT, 10.0);
+        enregistrement.put(DepenseHelper.CLE_UTILISATEUR, 1);
+
+        // insertion de l'enregistrement dans la base
+        base.insert(DepenseHelper.NOM_TABLE, DepenseHelper.NOM, enregistrement);
+
+        enregistrement.put(DepenseHelper.NOM, "café");
+        enregistrement.put(DepenseHelper.MONTANT, 19.6);
+        enregistrement.put(DepenseHelper.CLE_UTILISATEUR, 2);
+        // insertion de l'enregistrement dans la base
+        base.insert(DepenseHelper.NOM_TABLE, DepenseHelper.NOM, enregistrement);
+
+        enregistrement.put(DepenseHelper.NOM, "hôtel");
+        enregistrement.put(DepenseHelper.MONTANT, 151.96);
+        enregistrement.put(DepenseHelper.CLE_UTILISATEUR, 2);
+        // insertion de l'enregistrement dans la base
+        base.insert(DepenseHelper.NOM_TABLE, DepenseHelper.NOM, enregistrement);
     }
 
     @Override

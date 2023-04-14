@@ -39,7 +39,7 @@ public class UtilisateurDao {
     /**
      * Gestionnaire permettant de créer la base de donnée
      */
-    private UtilisateurHelper gestionnaireBase;
+    private UtilisateurHelper helper;
     /**
      * Base de données contenant la description des utilisateurs
      */
@@ -55,7 +55,7 @@ public class UtilisateurDao {
     public static final String REQUETE_TOUT_SELECTIONNER =
             "select *"
             + " from " + UtilisateurHelper.NOM_TABLE
-            + " order by " + UtilisateurHelper.PRENOM;
+            + ";";
 
     /** Instance de UtilisateurDao : elle sera unique au sein de l'application */
     private static UtilisateurDao instanceUtilisateurDao;
@@ -78,7 +78,7 @@ public class UtilisateurDao {
      * * @param leContexte contexte de l'activité créatrice
      */
     private UtilisateurDao(Context leContexte) {
-        gestionnaireBase = UtilisateurHelper.getInstance(leContexte, NOM_BD, null, VERSION);
+        helper = UtilisateurHelper.getInstance(leContexte, NOM_BD, null, VERSION);
         depenseDao = DepenseDao.getInstance(leContexte);
     }
 
@@ -86,14 +86,14 @@ public class UtilisateurDao {
      * Ouverture de la base de données
      */
     public void open() {
-        base = gestionnaireBase.getWritableDatabase();
+        base = helper.getWritableDatabase();
     }
 
     /**
      * Fermeture de la base de données et de la connexion
      */
     public void close() {
-        gestionnaireBase.close();
+        helper.close();
         base.close();
     }
 
@@ -111,7 +111,9 @@ public class UtilisateurDao {
      */
     public ArrayList<Utilisateur> getAll() {
         Cursor curseurTous = getCurseur();
-        return cursorToListeUtilisateurs(curseurTous);
+        ArrayList<Utilisateur> tmp = cursorToListeUtilisateurs(curseurTous);
+        curseurTous.close();
+        return tmp;
     }
 
     /**
@@ -167,7 +169,9 @@ public class UtilisateurDao {
                                                 UtilisateurHelper.PRENOM},
                               UtilisateurHelper.PRENOM + " = ? ",
                                   new String[] {prenom}, null, null, null);
-        return cursorToUtilisateurs(c);
+        Utilisateur tmp =  cursorToUtilisateurs(c);
+        c.close();
+        return tmp;
     }
 
     /**
@@ -188,7 +192,6 @@ public class UtilisateurDao {
                 listeUtilisateur.add(aAjouter);
             } while (c.moveToNext());
         }
-        c.close();
         return listeUtilisateur;
     }
     /**
@@ -209,7 +212,6 @@ public class UtilisateurDao {
             aRenvoyer.setPrenom(c.getString(COLONNE_PRENOM));
             aRenvoyer.setDepenses(depenseDao.getByUtilisateur(aRenvoyer.getId()));
         }
-        c.close();
         return aRenvoyer;
     }
 }

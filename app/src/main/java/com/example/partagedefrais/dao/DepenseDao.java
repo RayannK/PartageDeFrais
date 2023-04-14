@@ -47,7 +47,7 @@ public class DepenseDao {
     /**
      * Gestionnaire permettant de créer la base de donnée
      */
-    private DepenseHelper gestionnaireBase;
+    private DepenseHelper helper;
     /**
      * Base de données contenant la description des dépenses
      */
@@ -59,7 +59,7 @@ public class DepenseDao {
     public static final String REQUETE_TOUT_SELECTIONNER =
             "select *"
             + " from " + DepenseHelper.NOM_TABLE
-            + " order by " + DepenseHelper.NOM;
+            + ";";
 
     /** Instance de DepenseDao : elle sera unique au sein de l'application */
     private static DepenseDao instanceDepenseDao;
@@ -82,21 +82,21 @@ public class DepenseDao {
      * * @param leContexte contexte de l'activité créatrice
      */
     private DepenseDao(Context leContexte) {
-        gestionnaireBase = DepenseHelper.getInstance(leContexte, NOM_BD, null, VERSION);
+        helper = DepenseHelper.getInstance(leContexte, NOM_BD, null, VERSION);
     }
 
     /**
      * Ouverture de la base de données
      */
     public void open() {
-        base = gestionnaireBase.getWritableDatabase();
+        base = helper.getWritableDatabase();
     }
 
     /**
      * Fermeture de la base de données et de la connexion
      */
     public void close() {
-        gestionnaireBase.close();
+        helper.close();
         base.close();
     }
 
@@ -114,7 +114,9 @@ public class DepenseDao {
      */
     public ArrayList<Depense> getAll() {
         Cursor curseurTous = getCurseur();
-        return cursorToListeDepenses(curseurTous);
+        ArrayList<Depense> tmp = cursorToListeDepenses(curseurTous);
+        curseurTous.close();
+        return tmp;
     }
 
     /**
@@ -182,7 +184,9 @@ public class DepenseDao {
                                             DepenseHelper.CLE_UTILISATEUR},
                               DepenseHelper.NOM + " = ? ",
                               new String[] {nom}, null, null, null);
-        return cursorToDepenses(c);
+        Depense tmp = cursorToDepenses(c);
+        c.close();
+        return tmp;
     }
 
     /**
@@ -197,7 +201,9 @@ public class DepenseDao {
                                             DepenseHelper.CLE_UTILISATEUR},
                               DepenseHelper.CLE_UTILISATEUR + " = ? ",
                               new String[] {Long.toString(id)}, null, null, null);
-        return cursorToListeDepenses(c);
+        ArrayList<Depense> tmp = cursorToListeDepenses(c);
+        c.close();
+        return tmp;
     }
 
     /**
@@ -218,7 +224,6 @@ public class DepenseDao {
                 listeDepense.add(aAjouter);
             } while (c.moveToNext());
         }
-        c.close();
         return listeDepense;
     }
     /**
@@ -239,7 +244,6 @@ public class DepenseDao {
             aRenvoyer.setNom(c.getString(COLONNE_NOM));
             aRenvoyer.setMontant(c.getDouble(COLONNE_MONTANT));
         }
-        c.close();
         return aRenvoyer;
     }
 }
