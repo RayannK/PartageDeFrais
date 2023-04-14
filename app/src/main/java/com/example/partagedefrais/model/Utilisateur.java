@@ -116,4 +116,12 @@ public class Utilisateur {
     public double soldeUtilisateur(double partDepenseVoyage) {
         return sommeDepense() - partDepenseVoyage;
     }
+
+    /**
+     * Ajout d'une dépense à la liste de l'utilisateur
+     * @param depense
+     */
+    public void addDepense(Depense depense) {
+        getDepenses().add(depense);
+    }
 }
