@@ -45,7 +45,7 @@ public class DepenseViewHolder  extends RecyclerView.ViewHolder implements View.
      * @param depense l'instance qui doit être affichée
      */
     public void bind(Depense depense){
-        utilisateur.setText("");
+        utilisateur.setText("test");
         nomDepense.setText(depense.getNom());
         montantDepense.setText(depense.getMontant() + "€");
     }
@@ -54,5 +54,4 @@ public class DepenseViewHolder  extends RecyclerView.ViewHolder implements View.
     public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
         new MenuInflater(this.itemView.getContext()).inflate(R.menu.menu_context, menu);
     }
-
 }

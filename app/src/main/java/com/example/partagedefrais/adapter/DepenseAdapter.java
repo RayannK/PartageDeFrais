@@ -36,7 +36,7 @@ public class DepenseAdapter extends RecyclerView.Adapter<DepenseViewHolder> {
     }
 
     /**
-     * Renvoie un contenant de type PhotoViewHolder qui permettra d'afficher
+     * Renvoie un contenant de type DepenseViewHolder qui permettra d'afficher
      * un élément de la liste
      */
     @Override

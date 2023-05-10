@@ -191,6 +191,23 @@ public class UtilisateurDao {
     }
 
     /**
+     * Recherche dans la table des utilisateurs, l'utilisateur dont le nom est donné en argument
+     * @param id identifiant de la dépense à chercher dans la table des utilisateurs
+     * @return l'instance Utilisateur dont le nom est donné en arugment (null si non trouvé)
+     */
+    public Utilisateur getByDepenseId(long id) {
+        long utilisateurId = depenseDao.getById(id).getId();
+        Cursor c = base.query(UtilisateurHelper.NOM_TABLE,
+                              new String[] {UtilisateurHelper.CLE,
+                                            UtilisateurHelper.PRENOM},
+                              UtilisateurHelper.CLE + " = ? ",
+                              new String[] {utilisateurId+""}, null, null, null);
+        Utilisateur tmp =  cursorToUtilisateurs(c);
+        c.close();
+        return tmp;
+    }
+
+    /**
      * Transforme l'ensemble des utilisateur contenus dans un curseur en une liste d'utilisateur
      * @param c un curseur sur un ensemble d'utilisateur
      * @return une liste contenant les utilisateurs référencés par le curseur

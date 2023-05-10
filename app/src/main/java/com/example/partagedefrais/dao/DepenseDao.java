@@ -191,6 +191,23 @@ public class DepenseDao {
 
     /**
      * Recherche dans la table des dépenses, la dépense dont le nom est donné en argument
+     * @param id identifiant de la dépense à chercher dans la table des dépenses
+     * @return l'instance Depense dont le nom est donné en arugment (null si non trouvé)
+     */
+    public Depense getById(long id) {
+        Cursor c = base.query(DepenseHelper.NOM_TABLE,
+                              new String[] {DepenseHelper.CLE,
+                                            DepenseHelper.NOM,
+                                            DepenseHelper.CLE_UTILISATEUR},
+                              DepenseHelper.CLE + " = ? ",
+                              new String[] {id+""}, null, null, null);
+        Depense tmp = cursorToDepenses(c);
+        c.close();
+        return tmp;
+    }
+
+    /**
+     * Recherche dans la table des dépenses, la dépense dont le nom est donné en argument
      * @param id identifiant de l'utilisateur à chercher dans la table des dépenses
      * @return l'instance Depense dont le nom est donné en arugment (null si non trouvé)
      */
