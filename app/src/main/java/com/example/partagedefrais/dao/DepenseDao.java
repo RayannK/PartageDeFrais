@@ -140,7 +140,7 @@ public class DepenseDao {
      * @param id identifiant de la dépense à supprimer
      * @return un entier égal au nombre de lignes supprimées
      */
-    public int delete(int id) {
+    public int delete(long id) {
         return base.delete(DepenseHelper.NOM_TABLE,
                            DepenseHelper.CLE + " = ?",
                            new String[] { id+"" });

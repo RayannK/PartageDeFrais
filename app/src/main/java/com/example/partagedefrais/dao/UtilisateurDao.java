@@ -135,7 +135,7 @@ public class UtilisateurDao {
      * @param id identifiant de l'utilisateur à supprimer
      * @return un entier égal au nombre de lignes supprimées
      */
-    public int delete(int id) {
+    public int delete(long id) {
         Utilisateur aSupprimer = getById(id);
         depenseDao.deleteByUtilisateur(id);
 
@@ -179,7 +179,7 @@ public class UtilisateurDao {
      * @param id identifiant de l'utilisateur à chercher dans la table des utilisateurs
      * @return l'instance Utilisateur dont le nom est donné en arugment (null si non trouvé)
      */
-    public Utilisateur getById(int id) {
+    public Utilisateur getById(long id) {
         Cursor c = base.query(UtilisateurHelper.NOM_TABLE,
                               new String[] {UtilisateurHelper.CLE,
                                             UtilisateurHelper.PRENOM},
