@@ -5,6 +5,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.ContextMenu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 
 import com.example.partagedefrais.adapter.DepenseAdapter;
 import com.example.partagedefrais.dao.DepenseDao;
@@ -52,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         DepenseAdapter adaptateur = new DepenseAdapter(listeDepense);
         depenseRecyclerView.setAdapter(adaptateur);
 
-
+        registerForContextMenu(depenseRecyclerView);
     }
 
     /**
@@ -75,5 +81,26 @@ public class MainActivity extends AppCompatActivity {
         accesUtilisateur.close();
         accesDepense.close();
         super.onDestroy();
+    }
+
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo information =
+                (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        Log.i("Partage","Menu context");
+        switch (item.getItemId()) {
+            case R.id.voirDetail:
+                // TODO
+                break;
+
+            case R.id.modifierDepense:
+                // TODO
+                break;
+
+            case R.id.annuler :
+                break;
+        }
+        return (super.onContextItemSelected(item));
     }
 }

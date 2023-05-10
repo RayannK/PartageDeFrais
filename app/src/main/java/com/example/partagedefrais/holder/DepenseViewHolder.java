@@ -3,6 +3,8 @@
  */
 package com.example.partagedefrais.holder;
 
+import android.view.ContextMenu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.TextView;
 
@@ -16,7 +18,7 @@ import com.example.partagedefrais.model.Depense;
  * permettant d'afficher les dépenses.
  * @author rayann.karon
  */
-public class DepenseViewHolder  extends RecyclerView.ViewHolder{
+public class DepenseViewHolder  extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
 
     private final TextView utilisateur;
     private final TextView nomDepense;
@@ -34,6 +36,7 @@ public class DepenseViewHolder  extends RecyclerView.ViewHolder{
         utilisateur = itemView.findViewById(R.id.utilisateur);
         nomDepense = itemView.findViewById(R.id.nom_depense);
         montantDepense = itemView.findViewById(R.id.montant_depense);
+        itemView.setOnCreateContextMenuListener(this);
     }
 
     /**
@@ -46,4 +49,10 @@ public class DepenseViewHolder  extends RecyclerView.ViewHolder{
         nomDepense.setText(depense.getNom());
         montantDepense.setText(depense.getMontant() + "€");
     }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
+        new MenuInflater(this.itemView.getContext()).inflate(R.menu.menu_context, menu);
+    }
+
 }
