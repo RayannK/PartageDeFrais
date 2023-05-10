@@ -206,7 +206,7 @@ public class UtilisateurDao {
         if (c.getCount() == 0) {
             aRenvoyer = null;
         } else {
-            c.moveToFirst();
+//            c.moveToFirst();
             // on initialise l'instance Utilisateur avec les valeurs des colonnes
             aRenvoyer = new Utilisateur(c.getInt(COLONNE_CLE));
             aRenvoyer.setPrenom(c.getString(COLONNE_PRENOM));

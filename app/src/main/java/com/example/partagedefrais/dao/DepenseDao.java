@@ -238,7 +238,7 @@ public class DepenseDao {
         if (c.getCount() == 0) {
             aRenvoyer = null;
         } else {
-            c.moveToFirst();
+//            c.moveToFirst();
             // on initialise l'instance Depense avec les valeurs des colonnes
             aRenvoyer = new Depense(c.getInt(COLONNE_CLE));
             aRenvoyer.setNom(c.getString(COLONNE_NOM));
