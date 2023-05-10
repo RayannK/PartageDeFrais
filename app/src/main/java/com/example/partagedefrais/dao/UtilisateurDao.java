@@ -132,12 +132,12 @@ public class UtilisateurDao {
 
     /**
      * Supprime un utilisateur ansi que ses dépenses de la table des utilisateurs
-     * @param prenom nom de l'utilisateur à supprimer
+     * @param id identifiant de l'utilisateur à supprimer
      * @return un entier égal au nombre de lignes supprimées
      */
-    public int delete(String prenom) {
-        Utilisateur aSupprimer = get(prenom);
-        depenseDao.deleteByUtilisateur(aSupprimer.getId());
+    public int delete(int id) {
+        Utilisateur aSupprimer = getById(id);
+        depenseDao.deleteByUtilisateur(id);
 
         return base.delete(UtilisateurHelper.NOM_TABLE,
                            UtilisateurHelper.CLE + " = ?",
@@ -165,10 +165,26 @@ public class UtilisateurDao {
      */
     public Utilisateur get(String prenom) {
         Cursor c = base.query(UtilisateurHelper.NOM_TABLE,
-                                  new String[] {UtilisateurHelper.CLE,
-                                                UtilisateurHelper.PRENOM},
+                              new String[] {UtilisateurHelper.CLE,
+                                            UtilisateurHelper.PRENOM},
                               UtilisateurHelper.PRENOM + " = ? ",
-                                  new String[] {prenom}, null, null, null);
+                              new String[] {prenom}, null, null, null);
+        Utilisateur tmp =  cursorToUtilisateurs(c);
+        c.close();
+        return tmp;
+    }
+
+    /**
+     * Recherche dans la table des utilisateurs, l'utilisateur dont le nom est donné en argument
+     * @param id identifiant de l'utilisateur à chercher dans la table des utilisateurs
+     * @return l'instance Utilisateur dont le nom est donné en arugment (null si non trouvé)
+     */
+    public Utilisateur getById(int id) {
+        Cursor c = base.query(UtilisateurHelper.NOM_TABLE,
+                              new String[] {UtilisateurHelper.CLE,
+                                            UtilisateurHelper.PRENOM},
+                              UtilisateurHelper.CLE + " = ? ",
+                              new String[] {id+""}, null, null, null);
         Utilisateur tmp =  cursorToUtilisateurs(c);
         c.close();
         return tmp;

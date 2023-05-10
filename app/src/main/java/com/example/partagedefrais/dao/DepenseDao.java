@@ -137,13 +137,13 @@ public class DepenseDao {
 
     /**
      * Supprime une dépense de la table des dépense
-     * @param nom nom de la dépense à supprimer
+     * @param id identifiant de la dépense à supprimer
      * @return un entier égal au nombre de lignes supprimées
      */
-    public int delete(String nom) {
+    public int delete(int id) {
         return base.delete(DepenseHelper.NOM_TABLE,
-                           DepenseHelper.NOM + " = ?",
-                           new String[] { nom });
+                           DepenseHelper.CLE + " = ?",
+                           new String[] { id+"" });
     }
 
     /**
