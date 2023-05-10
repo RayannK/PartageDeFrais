@@ -7,6 +7,7 @@ package com.example.partagedefrais.model;
 import android.content.Context;
 
 import com.example.partagedefrais.dao.DepenseDao;
+import com.example.partagedefrais.dao.UtilisateurDao;
 
 import java.util.ArrayList;
 
@@ -35,7 +36,27 @@ public class GestionFrais {
      * @param context
      * @return
      */
-    public ArrayList<Depense> getDepenseUtilisateur(long idUtilisateur, Context context) {
+    public ArrayList<Depense> getDepenseByUtilisateurId(long idUtilisateur, Context context) {
         return DepenseDao.getInstance(context).getByUtilisateur(idUtilisateur);
+    }
+
+    /**
+     *
+     * @param nom
+     * @param context
+     * @return
+     */
+    public Depense getDepenseByNom(String nom, Context context) {
+        return DepenseDao.getInstance(context).get(nom);
+    }
+
+    /**
+     *
+     * @param idUtilisateur
+     * @param context
+     * @return
+     */
+    public Utilisateur getUtilisateurById(long idUtilisateur, Context context) {
+        return UtilisateurDao.getInstance(context).getById(idUtilisateur);
     }
 }
