@@ -6,6 +6,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.AdapterView;
 
@@ -102,4 +104,29 @@ public class MainActivity extends AppCompatActivity {
         }
         return (super.onContextItemSelected(item));
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        new MenuInflater(this).inflate(R.menu.menu_option, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // réaliser l'opération souhaitée par l'utilisateur
+        switch (item.getItemId()) {
+            case R.id.option_ajouter:
+                // TODO
+                break;
+            case R.id.option_rechercher:
+                // TODO
+                break;
+            case R.id.option_reset:
+                // TODO
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
 }

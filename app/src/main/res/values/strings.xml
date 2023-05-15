@@ -3,4 +3,7 @@
     <string name="voir_detailsDepense">Voir details</string>
     <string name="annuler">Annuler</string>
     <string name="modifier">Modifier</string>
+    <string name="option_ajouter">Ajouter</string>
+    <string name="option_rechercher">Rechercher</string>
+    <string name="option_reset">Reset</string>
 </resources>

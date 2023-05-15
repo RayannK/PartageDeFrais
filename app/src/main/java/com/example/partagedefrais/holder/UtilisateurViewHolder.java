@@ -3,6 +3,8 @@
  */
 package com.example.partagedefrais.holder;
 
+import android.view.ContextMenu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.TextView;
 
@@ -19,7 +21,7 @@ import com.example.partagedefrais.model.Utilisateur;
  * TODO commenter la classe
  * @author rayann.karon
  */
-public class UtilisateurViewHolder extends RecyclerView.ViewHolder {
+public class UtilisateurViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener  {
 
     private TextView utilisateur;
     private RecyclerView depenseRecyclerView;
@@ -39,6 +41,7 @@ public class UtilisateurViewHolder extends RecyclerView.ViewHolder {
 //        LinearLayoutManager gestionnaireLineaire = new LinearLayoutManager(
 //                itemView.getContext());
 //        depenseRecyclerView.setLayoutManager(gestionnaireLineaire);
+        itemView.setOnCreateContextMenuListener(this);
     }
 
     /**
@@ -50,5 +53,10 @@ public class UtilisateurViewHolder extends RecyclerView.ViewHolder {
         utilisateur.setText(user.getPrenom());
 //        DepenseAdapter adaptateur = new DepenseAdapter(user.getDepenses());
 //        depenseRecyclerView.setAdapter(adaptateur);
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
+        new MenuInflater(this.itemView.getContext()).inflate(R.menu.menu_context, menu);
     }
 }
