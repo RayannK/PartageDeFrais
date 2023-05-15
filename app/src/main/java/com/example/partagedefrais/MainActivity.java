@@ -4,12 +4,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 
 import com.example.partagedefrais.adapter.UtilisateurAdapter;
 import com.example.partagedefrais.dao.DepenseDao;
@@ -116,10 +120,10 @@ public class MainActivity extends AppCompatActivity {
         // réaliser l'opération souhaitée par l'utilisateur
         switch (item.getItemId()) {
             case R.id.option_ajouter:
-                // TODO
+                saisirDepense();
                 break;
             case R.id.option_rechercher:
-                // TODO
+                saisirRechercherMot();
                 break;
             case R.id.option_reset:
                 // TODO
@@ -127,6 +131,88 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Cette méthode affiche une boîte de dialogue permettant
+     * à l'utilisateur de saisir un nom d'aliment
+     */
+    private void saisirRechercherMot() {
+
+        // on désérialise le layout qui est associé à la boîte de saisie d'un pays
+        final View boiteSaisie = getLayoutInflater().inflate(R.layout.saisi_nom_recherche, null);
+
+        /*
+         * Création d'une boîte de dialogue pour saisir un aliment
+         */
+        new AlertDialog.Builder(this)
+                .setTitle(getResources().getString(R.string.titre_Recherche))
+                .setView(boiteSaisie)
+                .setPositiveButton(getResources().getString(R.string.bouton_positif),
+                        new DialogInterface.OnClickListener() {
+
+                            // méthode invoquée lorsque l'utilisateur validera la saisie
+                            public void onClick(DialogInterface dialog,
+                                                int leBouton) {
+                                String alimentSaisi;
+                                // on récupère un accès sur les zones de saisies de la boîte
+                                EditText nomAliment =
+                                        boiteSaisie.findViewById(R.id.saisi_mot_recherche);
+                                alimentSaisi = nomAliment.getText().toString() ;
+
+                                // pour afficher le résultat de la recherche
+                                //TODO appel méthode pour l'affichage du resultat
+                            }
+                        })
+                .setNegativeButton(getResources().getString(R.string.bouton_negatif), null)
+                .show();
+    }
+
+    /**
+     * Cette méthode affiche une boîte de dialogue permettant
+     * à l'utilisateur de saisir une depense
+     */
+    private void saisirDepense() {
+
+        // on désérialise le layout qui est associé à la boîte de saisie d'un pays
+        final View boiteSaisie = getLayoutInflater().inflate(R.layout.ajout_depense, null);
+
+        /*
+         * Création d'une boîte de dialogue pour saisir un aliment
+         */
+        new AlertDialog.Builder(this)
+                .setTitle(getResources().getString(R.string.titre_Ajout))
+                .setView(boiteSaisie)
+                .setPositiveButton(getResources().getString(R.string.bouton_positif),
+                        new DialogInterface.OnClickListener() {
+
+                            // méthode invoquée lorsque l'utilisateur validera la saisie
+                            public void onClick(DialogInterface dialog,
+                                                int leBouton) {
+                                String UtilisateurSaisi;
+                                // on récupère un accès sur les zones de saisies de la boîte
+                                EditText nomUtilisateur =
+                                        boiteSaisie.findViewById(R.id.saisi_nom_utilisateur);
+                                UtilisateurSaisi = nomUtilisateur.getText().toString() ;
+
+                                String NomDepenseSaisi;
+                                // on récupère un accès sur les zones de saisies de la boîte
+                                EditText nomDepense =
+                                        boiteSaisie.findViewById(R.id.saisi_nom_depense);
+                                NomDepenseSaisi = nomUtilisateur.getText().toString() ;
+
+                                String MontantDepenseSaisi;
+                                // on récupère un accès sur les zones de saisies de la boîte
+                                EditText montantDepense =
+                                        boiteSaisie.findViewById(R.id.saisi_montant_depense);
+                                MontantDepenseSaisi = nomUtilisateur.getText().toString() ;
+
+                                // pour afficher le résultat de la recherche
+                                //TODO appel méthode pour l'ajout d'une depense
+                            }
+                        })
+                .setNegativeButton(getResources().getString(R.string.bouton_negatif), null)
+                .show();
     }
 
 }

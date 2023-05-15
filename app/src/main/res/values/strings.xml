@@ -6,4 +6,14 @@
     <string name="option_ajouter">Ajouter</string>
     <string name="option_rechercher">Rechercher</string>
     <string name="option_reset">Reset</string>
+    <string name="mot_recherche">Saisir le mot recherché"</string>
+    <string name="titre_Recherche">Saisie du mot pour la recherche</string>
+
+    <string name="bouton_positif">Valider</string>
+    <string name="bouton_negatif">Annuler</string>
+
+    <string name="nom_utilisateur">Nom de l\'utilisateur : </string>
+    <string name="nom_depense">Nom de la depense : </string>
+    <string name="montant_depense">Montant de la depense : </string>
+    <string name="titre_Ajout">Saisie la depense</string>
 </resources>
