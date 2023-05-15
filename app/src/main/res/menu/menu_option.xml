@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/option_ajouter"
+            android:title="@string/option_ajouter"/>
+    <item android:id="@+id/option_rechercher"
+            android:title="@string/option_rechercher"/>
+    <item android:id="@+id/option_reset"
+            android:title="@string/option_reset"/>
+</menu>
