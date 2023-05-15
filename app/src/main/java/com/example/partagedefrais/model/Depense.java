@@ -84,4 +84,9 @@ public class Depense {
     public long getId() {
         return id;
     }
+
+    @Override
+    public String toString() {
+        return nom + " : " + montant + "€";
+    }
 }

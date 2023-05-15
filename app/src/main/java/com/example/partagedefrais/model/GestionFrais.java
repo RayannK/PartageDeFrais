@@ -12,7 +12,6 @@ import com.example.partagedefrais.dao.UtilisateurDao;
 import java.util.ArrayList;
 
 /**
- * TODO Commenter la classe
  * @author clement.bonaz
  */
 public class GestionFrais {

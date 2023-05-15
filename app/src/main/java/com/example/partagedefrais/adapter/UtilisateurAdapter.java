@@ -18,7 +18,6 @@ import com.example.partagedefrais.model.Utilisateur;
 import java.util.List;
 
 /**
- * TODO commenter la classe
  * @author rayann.karon
  */
 public class UtilisateurAdapter
@@ -41,7 +40,7 @@ public class UtilisateurAdapter
     public UtilisateurViewHolder onCreateViewHolder(ViewGroup viewGroup,
                                                     int viewType) {
         View view = LayoutInflater.from(
-                viewGroup.getContext()).inflate(R.layout.vue_depense_liste,
+                viewGroup.getContext()).inflate(R.layout.vue_depense_utilisateur,
                                                 viewGroup, false);
         return new UtilisateurViewHolder(view);
     }

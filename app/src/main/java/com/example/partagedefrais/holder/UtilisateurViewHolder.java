@@ -6,42 +6,31 @@ package com.example.partagedefrais.holder;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.partagedefrais.R;
-import com.example.partagedefrais.adapter.DepenseAdapter;
-import com.example.partagedefrais.adapter.UtilisateurAdapter;
 import com.example.partagedefrais.model.Utilisateur;
 
 /**
- * TODO commenter la classe
  * @author rayann.karon
  */
 public class UtilisateurViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener  {
 
     private TextView utilisateur;
-    private RecyclerView depenseRecyclerView;
+    private ListView listeDepense;
 
     public UtilisateurViewHolder(
             @NonNull View itemView) {
         super(itemView);
         utilisateur = itemView.findViewById(R.id.utilisateur);
-        depenseRecyclerView = itemView.findViewById(R.id.recycler_depense);
+        listeDepense = itemView.findViewById(R.id.listeDepense);
 
-        /*
-         * On crée un gestionnaire de layout linéaire, et on l'associe à la
-         * liste de type RecyclerView
-         */
-        // TODO make nested Recycler view
-        // https://www.geeksforgeeks.org/how-to-create-a-nested-recyclerview-in-android/
-//        LinearLayoutManager gestionnaireLineaire = new LinearLayoutManager(
-//                itemView.getContext());
-//        depenseRecyclerView.setLayoutManager(gestionnaireLineaire);
-        itemView.setOnCreateContextMenuListener(this);
+        listeDepense.setOnCreateContextMenuListener(this);
     }
 
     /**
@@ -51,8 +40,14 @@ public class UtilisateurViewHolder extends RecyclerView.ViewHolder implements Vi
      */
     public void bind(Utilisateur user) {
         utilisateur.setText(user.getPrenom());
-//        DepenseAdapter adaptateur = new DepenseAdapter(user.getDepenses());
-//        depenseRecyclerView.setAdapter(adaptateur);
+        String [] depenses = new String[user.getDepenses().size()];
+
+        for (int i = 0; i < user.getDepenses().size(); i++) {
+            depenses[i] = user.getDepenses().get(i).toString();
+        }
+
+        ArrayAdapter<String> adaptateur = new ArrayAdapter<String>(this.itemView.getContext(), android.R.layout.simple_list_item_1, depenses);
+        listeDepense.setAdapter(adaptateur);
     }
 
     @Override
