@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
                 saisirRechercherMot();
                 break;
             case R.id.option_reset:
-                // TODO
+                resetApplication();
                 break;
         }
 
@@ -208,11 +208,53 @@ public class MainActivity extends AppCompatActivity {
                                 MontantDepenseSaisi = nomUtilisateur.getText().toString() ;
 
                                 // pour afficher le résultat de la recherche
-                                //TODO appel méthode pour l'ajout d'une depense
+                                ajoutDepense(UtilisateurSaisi,NomDepenseSaisi,MontantDepenseSaisi);
                             }
                         })
                 .setNegativeButton(getResources().getString(R.string.bouton_negatif), null)
                 .show();
+    }
+
+    public void resetApplication()
+    {
+        ArrayList<Depense> listDepense = DepenseDao.getInstance(this).getAll();
+
+        for (Depense depense: listDepense) {
+            DepenseDao.getInstance(this).delete(depense.getId());
+        }
+
+        ArrayList<Utilisateur> listUtilisateur = UtilisateurDao.getInstance(this).getAll();
+
+        for (Utilisateur utilisateur: listUtilisateur) {
+            UtilisateurDao.getInstance(this).delete(utilisateur.getId());
+        }
+    }
+
+    public void ajoutDepense(String prenomnomUtilisateur, String nomDepense, String montantDepense)
+    {
+        Utilisateur utilisateur = UtilisateurDao.getInstance(this).get(prenomnomUtilisateur);
+
+        Depense depense = new Depense(0, nomDepense, Double.parseDouble(montantDepense));
+
+        DepenseDao.getInstance(this).insert(depense, utilisateur.getId());
+
+        // TODO actualiser la liste des dépenses
+    }
+
+    public void rechercheDepense(String motRechercher)
+    {
+        ArrayList<Depense> listDepense =  DepenseDao.getInstance(this).getAll();
+
+        ArrayList<Depense> listDepenseMot = new ArrayList<>();
+
+        for (Depense depense: listDepense) {
+            if (depense.getNom().contains(motRechercher))
+            {
+                listDepenseMot.add(depense);
+            }
+        }
+
+        //TODO afficher résultat recherche
     }
 
 }
