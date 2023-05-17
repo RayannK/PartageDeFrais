@@ -86,19 +86,19 @@ public class DepenseHelper extends SQLiteOpenHelper {
         enregistrement.put(DepenseHelper.CLE_UTILISATEUR, 1);
 
         // insertion de l'enregistrement dans la base
-        base.insert(DepenseHelper.NOM_TABLE, DepenseHelper.NOM, enregistrement);
+        base.insert(DepenseHelper.NOM_TABLE, null, enregistrement);
 
         enregistrement.put(DepenseHelper.NOM, "café");
         enregistrement.put(DepenseHelper.MONTANT, 19.6);
         enregistrement.put(DepenseHelper.CLE_UTILISATEUR, 2);
         // insertion de l'enregistrement dans la base
-        base.insert(DepenseHelper.NOM_TABLE, DepenseHelper.NOM, enregistrement);
+        base.insert(DepenseHelper.NOM_TABLE, null,enregistrement);
 
         enregistrement.put(DepenseHelper.NOM, "hôtel");
         enregistrement.put(DepenseHelper.MONTANT, 151.96);
         enregistrement.put(DepenseHelper.CLE_UTILISATEUR, 2);
         // insertion de l'enregistrement dans la base
-        base.insert(DepenseHelper.NOM_TABLE, DepenseHelper.NOM, enregistrement);
+        base.insert(DepenseHelper.NOM_TABLE, null, enregistrement);
     }
 
     @Override

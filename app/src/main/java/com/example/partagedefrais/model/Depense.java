@@ -25,7 +25,7 @@ public class Depense {
     /**
      * montant de la dépense
      */
-    private Double montant;
+    private double montant;
 
     /**
      * Initilaisation d'une dépense
@@ -41,7 +41,7 @@ public class Depense {
      * @param nom nom de la dépense
      * @param montant somme de la dépense
      */
-    public Depense(long id, String nom, Double montant) {
+    public Depense(long id, String nom, double montant) {
         this.id = id;
         this.nom = nom;
         this.montant = montant;
@@ -66,14 +66,14 @@ public class Depense {
      * Getter de l'attribut montant
      * @return montant
      */
-    public Double getMontant() {
+    public double getMontant() {
         return montant;
     }
 
     /**
      * Setter de l'attribut montant
      */
-    public void setMontant(Double montant) {
+    public void setMontant(double montant) {
         this.montant = montant;
     }
 

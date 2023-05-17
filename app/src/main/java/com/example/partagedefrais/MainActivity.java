@@ -4,20 +4,24 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
 
 import com.example.partagedefrais.adapter.UtilisateurAdapter;
 import com.example.partagedefrais.dao.DepenseDao;
 import com.example.partagedefrais.dao.UtilisateurDao;
+import com.example.partagedefrais.helper.DataHelper;
 import com.example.partagedefrais.model.Depense;
 import com.example.partagedefrais.model.Utilisateur;
 
@@ -35,7 +39,6 @@ public class MainActivity extends AppCompatActivity {
      */
     private RecyclerView utilisateurRecyclerView;
 
-    private ArrayList<Depense> listeDepense;
     private ArrayList<Utilisateur> listeUtilisateur;
 
     @Override
@@ -59,7 +62,6 @@ public class MainActivity extends AppCompatActivity {
          * l'affichage des instances de type PhotoParis en tant que item de la liste.
          * Cet adapatateur est associé au RecyclerView
          */
-//        DepenseAdapter adaptateur = new DepenseAdapter(listeDepense);
         UtilisateurAdapter adaptateur = new UtilisateurAdapter(listeUtilisateur);
         utilisateurRecyclerView.setAdapter(adaptateur);
 
@@ -77,8 +79,6 @@ public class MainActivity extends AppCompatActivity {
         accesDepense.open();
 
         listeUtilisateur = accesUtilisateur.getAll();
-
-//        listeDepense = accesDepense.getAll();
     }
 
     @Override
@@ -158,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
                                 // on récupère un accès sur les zones de saisies de la boîte
                                 EditText nomAliment =
                                         boiteSaisie.findViewById(R.id.saisi_mot_recherche);
-                                alimentSaisi = nomAliment.getText().toString() ;
+                                alimentSaisi = DataHelper.getString(nomAliment) ;
 
                                 // pour afficher le résultat de la recherche
                                 //TODO appel méthode pour l'affichage du resultat
@@ -193,19 +193,19 @@ public class MainActivity extends AppCompatActivity {
                                 // on récupère un accès sur les zones de saisies de la boîte
                                 EditText nomUtilisateur =
                                         boiteSaisie.findViewById(R.id.saisi_nom_utilisateur);
-                                UtilisateurSaisi = nomUtilisateur.getText().toString() ;
+                                UtilisateurSaisi = DataHelper.getString(nomUtilisateur) ;
 
                                 String NomDepenseSaisi;
                                 // on récupère un accès sur les zones de saisies de la boîte
                                 EditText nomDepense =
                                         boiteSaisie.findViewById(R.id.saisi_nom_depense);
-                                NomDepenseSaisi = nomUtilisateur.getText().toString() ;
+                                NomDepenseSaisi = DataHelper.getString(nomUtilisateur) ;
 
                                 String MontantDepenseSaisi;
                                 // on récupère un accès sur les zones de saisies de la boîte
                                 EditText montantDepense =
                                         boiteSaisie.findViewById(R.id.saisi_montant_depense);
-                                MontantDepenseSaisi = nomUtilisateur.getText().toString() ;
+                                MontantDepenseSaisi = DataHelper.getString(nomUtilisateur) ;
 
                                 // pour afficher le résultat de la recherche
                                 ajoutDepense(UtilisateurSaisi,NomDepenseSaisi,MontantDepenseSaisi);
@@ -217,17 +217,15 @@ public class MainActivity extends AppCompatActivity {
 
     public void resetApplication()
     {
-        ArrayList<Depense> listDepense = DepenseDao.getInstance(this).getAll();
+//        ArrayList<Utilisateur> listUtilisateur = accesUtilisateur.getAll();
 
-        for (Depense depense: listDepense) {
-            DepenseDao.getInstance(this).delete(depense.getId());
+        for (Utilisateur utilisateur: listeUtilisateur) {
+            accesUtilisateur.delete(utilisateur.getId());
         }
 
-        ArrayList<Utilisateur> listUtilisateur = UtilisateurDao.getInstance(this).getAll();
-
-        for (Utilisateur utilisateur: listUtilisateur) {
-            UtilisateurDao.getInstance(this).delete(utilisateur.getId());
-        }
+        Intent myIntent = new Intent(MainActivity.this, ResetActivity.class);
+        MainActivity.this.startActivity(myIntent);
+        finish();
     }
 
     public void ajoutDepense(String prenomnomUtilisateur, String nomDepense, String montantDepense)

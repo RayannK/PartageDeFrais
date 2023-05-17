@@ -136,12 +136,11 @@ public class UtilisateurDao {
      * @return un entier égal au nombre de lignes supprimées
      */
     public int delete(long id) {
-        Utilisateur aSupprimer = getById(id);
         depenseDao.deleteByUtilisateur(id);
 
         return base.delete(UtilisateurHelper.NOM_TABLE,
                            UtilisateurHelper.CLE + " = ?",
-                               new String[] { Long.toString(aSupprimer.getId()) });
+                               new String[] { Long.toString(id) });
     }
 
     /**

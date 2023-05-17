@@ -16,4 +16,5 @@
     <string name="nom_depense">Nom de la depense : </string>
     <string name="montant_depense">Montant de la depense : </string>
     <string name="titre_Ajout">Saisie la depense</string>
+    <string name="titre_Ajout_utilisateur">Saisie de l\'utilisateur n°</string>
 </resources>
