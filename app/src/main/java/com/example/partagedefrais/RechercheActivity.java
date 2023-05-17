@@ -18,7 +18,7 @@ import java.util.List;
 import androidx.appcompat.app.AppCompatActivity;
 
 /**
- * TODO Commenter la classe
+ * Activité dans laquelle sont affiché les résultat de la recherche
  * @author clement.bonaz
  */
 public class RechercheActivity extends AppCompatActivity {
@@ -33,10 +33,12 @@ public class RechercheActivity extends AppCompatActivity {
         // on récupère l'intention qui a lancé cette activité
         Intent intentionRecu = getIntent();
 
+        // on récupère l'extra envoyant grace à l'intention
         long[] listeDepense = intentionRecu.getLongArrayExtra(MainActivity.CLE_RECHERCHE);
 
         String[] depenses = new String[listeDepense.length];
 
+        // récupération des dépenses correspondant au id du tableau listeDepense
         for (int i =0; i < listeDepense.length; i++)
         {
             depenses[i] = DepenseDao.getInstance(this).getById(listeDepense[i]).toString();

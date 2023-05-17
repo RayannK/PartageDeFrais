@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.partagedefrais.adapter.UtilisateurAdapter;
 import com.example.partagedefrais.dao.DepenseDao;
@@ -97,6 +98,11 @@ public class MainActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+    /**
+     * Appel de d'une fonction de traitement en fonction de l'item séléctionné par l'utilisateur
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // réaliser l'opération souhaitée par l'utilisateur
@@ -216,33 +222,67 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Controle des informations passer en parametre puis ajout de la dépense pour un utilisateur
+     * @param prenomUtilisateur
+     * @param nomDepense
+     * @param montantDepense
+     */
     public void ajoutDepense(String prenomUtilisateur, String nomDepense, String montantDepense)
     {
-        Utilisateur utilisateur = UtilisateurDao.getInstance(this).get(prenomUtilisateur);
+        if (prenomUtilisateur.equals("") || nomDepense.equals("") || montantDepense.equals(""))
+        {
+            Toast.makeText(this, "Les informations saisies ne sont pas valide", Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            Utilisateur utilisateur = UtilisateurDao.getInstance(this).get(prenomUtilisateur);
 
-        Depense depense = new Depense(0, nomDepense, Double.parseDouble(montantDepense));
+            Depense depense = new Depense(0, nomDepense, Double.parseDouble(montantDepense));
 
-        DepenseDao.getInstance(this).insert(depense, utilisateur.getId());
+            DepenseDao.getInstance(this).insert(depense, utilisateur.getId());
 
-        adaptateur.SetList(UtilisateurDao.getInstance(this).getAll());
+            adaptateur.SetList(UtilisateurDao.getInstance(this).getAll());
+            Toast.makeText(this, "Nouvelle dépense enregistré", Toast.LENGTH_SHORT).show();
+        }
     }
 
+    /**
+     * Controle du paramettre puis recherche des dépenses qui contient le mot recherché dans leur libéllé
+     * @param motRechercher
+     */
     public void rechercheDepense(String motRechercher)
     {
-        ArrayList<Depense> listDepense =  DepenseDao.getInstance(this).getAll();
-
-        ArrayList<Long> listeIdDepenseMot = new ArrayList<>();
-
-        for (Depense depense: listDepense) {
-            if (depense.getNom().contains(motRechercher))
-            {
-                listeIdDepenseMot.add(depense.getId());
-            }
+        if (motRechercher.equals(""))
+        {
+            Toast.makeText(this, "Le mot saisi n'est pas valide", Toast.LENGTH_SHORT).show();
         }
+        else
+        {
+            ArrayList<Depense> listDepense =  DepenseDao.getInstance(this).getAll();
 
-        AfficherResultat(listeIdDepenseMot);
+            ArrayList<Long> listeIdDepenseMot = new ArrayList<>();
+
+            for (Depense depense: listDepense) {
+                if (depense.getNom().contains(motRechercher))
+                {
+                    listeIdDepenseMot.add(depense.getId());
+                }
+            }
+
+            if (!listeIdDepenseMot.isEmpty())
+            {
+                AfficherResultat(listeIdDepenseMot);
+            }
+
+            Toast.makeText(this, "Aucune dépense ne contient le mot recherché", Toast.LENGTH_SHORT).show();
+        }
     }
 
+    /**
+     * Création d'une nouvelle activité pour afficher le résultat de la recherche
+     * @param listeDepense
+     */
     public void AfficherResultat(ArrayList<Long> listeDepense)
     {
         Intent intention =
