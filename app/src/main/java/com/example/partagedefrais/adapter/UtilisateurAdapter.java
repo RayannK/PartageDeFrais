@@ -15,6 +15,7 @@ import com.example.partagedefrais.holder.UtilisateurViewHolder;
 import com.example.partagedefrais.model.Depense;
 import com.example.partagedefrais.model.Utilisateur;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -55,5 +56,10 @@ public class UtilisateurAdapter
     @Override
     public int getItemCount() {
         return lesDonnees.size();
+    }
+
+    public void SetList(List<Utilisateur> utilisateurs)
+    {
+        this.lesDonnees = utilisateurs;
     }
 }

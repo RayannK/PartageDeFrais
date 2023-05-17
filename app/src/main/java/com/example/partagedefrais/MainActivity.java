@@ -4,8 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -28,12 +30,16 @@ public class MainActivity extends AppCompatActivity {
     /** Objet destiné à faciliter l'accès à la table des utilisateurs */
     private UtilisateurDao accesUtilisateur;
 
+    public final static String CLE_RECHERCHE = "com.example.partagedefrais.RECHERCHE";
+
     /** Objet destiné à faciliter l'accès à la table des dépenses */
     private DepenseDao accesDepense;
     /**
      * Element permettant d'afficher la liste des photos
      */
     private RecyclerView utilisateurRecyclerView;
+
+    private UtilisateurAdapter adaptateur;
 
     private ArrayList<Depense> listeDepense;
     private ArrayList<Utilisateur> listeUtilisateur;
@@ -59,11 +65,8 @@ public class MainActivity extends AppCompatActivity {
          * l'affichage des instances de type PhotoParis en tant que item de la liste.
          * Cet adapatateur est associé au RecyclerView
          */
-//        DepenseAdapter adaptateur = new DepenseAdapter(listeDepense);
-        UtilisateurAdapter adaptateur = new UtilisateurAdapter(listeUtilisateur);
+        adaptateur = new UtilisateurAdapter(listeUtilisateur);
         utilisateurRecyclerView.setAdapter(adaptateur);
-
-        registerForContextMenu(utilisateurRecyclerView);
     }
 
     /**
@@ -78,7 +81,6 @@ public class MainActivity extends AppCompatActivity {
 
         listeUtilisateur = accesUtilisateur.getAll();
 
-//        listeDepense = accesDepense.getAll();
     }
 
     @Override
@@ -88,26 +90,6 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        AdapterView.AdapterContextMenuInfo information =
-                (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        Log.i("Partage","Menu context");
-        switch (item.getItemId()) {
-            case R.id.voirDetail:
-                // TODO
-                break;
-
-            case R.id.modifierDepense:
-                // TODO
-                break;
-
-            case R.id.annuler :
-                break;
-        }
-        return (super.onContextItemSelected(item));
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -125,9 +107,13 @@ public class MainActivity extends AppCompatActivity {
             case R.id.option_rechercher:
                 saisirRechercherMot();
                 break;
+            case R.id.calcul_final:
+
+                break;
             case R.id.option_reset:
                 resetApplication();
                 break;
+
         }
 
         return super.onOptionsItemSelected(item);
@@ -154,14 +140,14 @@ public class MainActivity extends AppCompatActivity {
                             // méthode invoquée lorsque l'utilisateur validera la saisie
                             public void onClick(DialogInterface dialog,
                                                 int leBouton) {
-                                String alimentSaisi;
+                                String motSaisi;
                                 // on récupère un accès sur les zones de saisies de la boîte
-                                EditText nomAliment =
+                                EditText motRecherche =
                                         boiteSaisie.findViewById(R.id.saisi_mot_recherche);
-                                alimentSaisi = nomAliment.getText().toString() ;
+                                motSaisi = motRecherche.getText().toString() ;
 
                                 // pour afficher le résultat de la recherche
-                                //TODO appel méthode pour l'affichage du resultat
+                                rechercheDepense(motSaisi);
                             }
                         })
                 .setNegativeButton(getResources().getString(R.string.bouton_negatif), null)
@@ -199,13 +185,13 @@ public class MainActivity extends AppCompatActivity {
                                 // on récupère un accès sur les zones de saisies de la boîte
                                 EditText nomDepense =
                                         boiteSaisie.findViewById(R.id.saisi_nom_depense);
-                                NomDepenseSaisi = nomUtilisateur.getText().toString() ;
+                                NomDepenseSaisi = nomDepense.getText().toString() ;
 
                                 String MontantDepenseSaisi;
                                 // on récupère un accès sur les zones de saisies de la boîte
                                 EditText montantDepense =
                                         boiteSaisie.findViewById(R.id.saisi_montant_depense);
-                                MontantDepenseSaisi = nomUtilisateur.getText().toString() ;
+                                MontantDepenseSaisi = montantDepense.getText().toString() ;
 
                                 // pour afficher le résultat de la recherche
                                 ajoutDepense(UtilisateurSaisi,NomDepenseSaisi,MontantDepenseSaisi);
@@ -230,31 +216,48 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void ajoutDepense(String prenomnomUtilisateur, String nomDepense, String montantDepense)
+    public void ajoutDepense(String prenomUtilisateur, String nomDepense, String montantDepense)
     {
-        Utilisateur utilisateur = UtilisateurDao.getInstance(this).get(prenomnomUtilisateur);
+        Utilisateur utilisateur = UtilisateurDao.getInstance(this).get(prenomUtilisateur);
 
         Depense depense = new Depense(0, nomDepense, Double.parseDouble(montantDepense));
 
         DepenseDao.getInstance(this).insert(depense, utilisateur.getId());
 
-        // TODO actualiser la liste des dépenses
+        adaptateur.SetList(UtilisateurDao.getInstance(this).getAll());
     }
 
     public void rechercheDepense(String motRechercher)
     {
         ArrayList<Depense> listDepense =  DepenseDao.getInstance(this).getAll();
 
-        ArrayList<Depense> listDepenseMot = new ArrayList<>();
+        ArrayList<Long> listeIdDepenseMot = new ArrayList<>();
 
         for (Depense depense: listDepense) {
             if (depense.getNom().contains(motRechercher))
             {
-                listDepenseMot.add(depense);
+                listeIdDepenseMot.add(depense.getId());
             }
         }
 
-        //TODO afficher résultat recherche
+        AfficherResultat(listeIdDepenseMot);
+    }
+
+    public void AfficherResultat(ArrayList<Long> listeDepense)
+    {
+        Intent intention =
+                new Intent(MainActivity.this, RechercheActivity.class);
+
+        long[] tabId = new long[listeDepense.size()];
+
+        for (int i =0; i < listeDepense.size(); i++)
+        {
+            tabId[i] = listeDepense.get(i);
+        }
+
+        intention.putExtra(CLE_RECHERCHE,tabId);
+
+        MainActivity.this.startActivity(intention);
     }
 
 }

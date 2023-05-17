@@ -10,6 +10,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.example.partagedefrais.helper.DepenseHelper;
 import com.example.partagedefrais.model.Depense;
+import com.example.partagedefrais.model.Utilisateur;
 
 import java.util.ArrayList;
 
@@ -237,7 +238,9 @@ public class DepenseDao {
              * le dépense référencé par le curseur à la liste
              */
             do {
-                aAjouter = cursorToDepenses(c);
+                aAjouter = new Depense(c.getLong(COLONNE_CLE));
+                aAjouter.setNom(c.getString(COLONNE_NOM));
+                aAjouter.setMontant(c.getDouble(COLONNE_MONTANT));
                 listeDepense.add(aAjouter);
             } while (c.moveToNext());
         }
@@ -255,7 +258,7 @@ public class DepenseDao {
         if (c.getCount() == 0) {
             aRenvoyer = null;
         } else {
-//            c.moveToFirst();
+            c.moveToFirst();
             // on initialise l'instance Depense avec les valeurs des colonnes
             aRenvoyer = new Depense(c.getInt(COLONNE_CLE));
             aRenvoyer.setNom(c.getString(COLONNE_NOM));

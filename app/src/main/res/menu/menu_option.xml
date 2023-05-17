@@ -4,6 +4,8 @@
             android:title="@string/option_ajouter"/>
     <item android:id="@+id/option_rechercher"
             android:title="@string/option_rechercher"/>
+    <item android:id="@+id/calcul_final"
+            android:title="@string/calcul_total"/>
     <item android:id="@+id/option_reset"
             android:title="@string/option_reset"/>
 </menu>
