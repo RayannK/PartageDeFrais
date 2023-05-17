@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ActionBar;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -17,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.partagedefrais.adapter.UtilisateurAdapter;
 import com.example.partagedefrais.dao.DepenseDao;
@@ -32,6 +34,8 @@ public class MainActivity extends AppCompatActivity {
     /** Objet destiné à faciliter l'accès à la table des utilisateurs */
     private UtilisateurDao accesUtilisateur;
 
+    public final static String CLE_RECHERCHE = "com.example.partagedefrais.RECHERCHE";
+
     /** Objet destiné à faciliter l'accès à la table des dépenses */
     private DepenseDao accesDepense;
     /**
@@ -39,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
      */
     private RecyclerView utilisateurRecyclerView;
 
+
+    private UtilisateurAdapter adaptateur;
     private ArrayList<Utilisateur> listeUtilisateur;
 
     @Override
@@ -62,10 +68,8 @@ public class MainActivity extends AppCompatActivity {
          * l'affichage des instances de type PhotoParis en tant que item de la liste.
          * Cet adapatateur est associé au RecyclerView
          */
-        UtilisateurAdapter adaptateur = new UtilisateurAdapter(listeUtilisateur);
+        adaptateur = new UtilisateurAdapter(listeUtilisateur);
         utilisateurRecyclerView.setAdapter(adaptateur);
-
-        registerForContextMenu(utilisateurRecyclerView);
     }
 
     /**
@@ -79,6 +83,10 @@ public class MainActivity extends AppCompatActivity {
         accesDepense.open();
 
         listeUtilisateur = accesUtilisateur.getAll();
+<<<<<<< HEAD
+=======
+
+>>>>>>> refs/remotes/origin/main
     }
 
     @Override
@@ -90,31 +98,16 @@ public class MainActivity extends AppCompatActivity {
 
 
     @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        AdapterView.AdapterContextMenuInfo information =
-                (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        Log.i("Partage","Menu context");
-        switch (item.getItemId()) {
-            case R.id.voirDetail:
-                // TODO
-                break;
-
-            case R.id.modifierDepense:
-                // TODO
-                break;
-
-            case R.id.annuler :
-                break;
-        }
-        return (super.onContextItemSelected(item));
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         new MenuInflater(this).inflate(R.menu.menu_option, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
+    /**
+     * Appel de d'une fonction de traitement en fonction de l'item séléctionné par l'utilisateur
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // réaliser l'opération souhaitée par l'utilisateur
@@ -125,9 +118,13 @@ public class MainActivity extends AppCompatActivity {
             case R.id.option_rechercher:
                 saisirRechercherMot();
                 break;
+            case R.id.calcul_final:
+
+                break;
             case R.id.option_reset:
                 resetApplication();
                 break;
+
         }
 
         return super.onOptionsItemSelected(item);
@@ -154,14 +151,13 @@ public class MainActivity extends AppCompatActivity {
                             // méthode invoquée lorsque l'utilisateur validera la saisie
                             public void onClick(DialogInterface dialog,
                                                 int leBouton) {
-                                String alimentSaisi;
+                                String motSaisi;
                                 // on récupère un accès sur les zones de saisies de la boîte
-                                EditText nomAliment =
+                                EditText motRecherche =
                                         boiteSaisie.findViewById(R.id.saisi_mot_recherche);
                                 alimentSaisi = DataHelper.getString(nomAliment) ;
-
                                 // pour afficher le résultat de la recherche
-                                //TODO appel méthode pour l'affichage du resultat
+                                rechercheDepense(motSaisi);
                             }
                         })
                 .setNegativeButton(getResources().getString(R.string.bouton_negatif), null)
@@ -228,31 +224,82 @@ public class MainActivity extends AppCompatActivity {
         finish();
     }
 
-    public void ajoutDepense(String prenomnomUtilisateur, String nomDepense, String montantDepense)
+    /**
+     * Controle des informations passer en parametre puis ajout de la dépense pour un utilisateur
+     * @param prenomUtilisateur
+     * @param nomDepense
+     * @param montantDepense
+     */
+    public void ajoutDepense(String prenomUtilisateur, String nomDepense, String montantDepense)
     {
-        Utilisateur utilisateur = UtilisateurDao.getInstance(this).get(prenomnomUtilisateur);
+        if (prenomUtilisateur.equals("") || nomDepense.equals("") || montantDepense.equals(""))
+        {
+            Toast.makeText(this, "Les informations saisies ne sont pas valide", Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            Utilisateur utilisateur = UtilisateurDao.getInstance(this).get(prenomUtilisateur);
 
-        Depense depense = new Depense(0, nomDepense, Double.parseDouble(montantDepense));
+            Depense depense = new Depense(0, nomDepense, Double.parseDouble(montantDepense));
 
-        DepenseDao.getInstance(this).insert(depense, utilisateur.getId());
+            DepenseDao.getInstance(this).insert(depense, utilisateur.getId());
 
-        // TODO actualiser la liste des dépenses
+            adaptateur.SetList(UtilisateurDao.getInstance(this).getAll());
+            Toast.makeText(this, "Nouvelle dépense enregistré", Toast.LENGTH_SHORT).show();
+        }
     }
 
+    /**
+     * Controle du paramettre puis recherche des dépenses qui contient le mot recherché dans leur libéllé
+     * @param motRechercher
+     */
     public void rechercheDepense(String motRechercher)
     {
-        ArrayList<Depense> listDepense =  DepenseDao.getInstance(this).getAll();
+        if (motRechercher.equals(""))
+        {
+            Toast.makeText(this, "Le mot saisi n'est pas valide", Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            ArrayList<Depense> listDepense =  DepenseDao.getInstance(this).getAll();
 
-        ArrayList<Depense> listDepenseMot = new ArrayList<>();
+            ArrayList<Long> listeIdDepenseMot = new ArrayList<>();
 
-        for (Depense depense: listDepense) {
-            if (depense.getNom().contains(motRechercher))
-            {
-                listDepenseMot.add(depense);
+            for (Depense depense: listDepense) {
+                if (depense.getNom().contains(motRechercher))
+                {
+                    listeIdDepenseMot.add(depense.getId());
+                }
             }
+
+            if (!listeIdDepenseMot.isEmpty())
+            {
+                AfficherResultat(listeIdDepenseMot);
+            }
+
+            Toast.makeText(this, "Aucune dépense ne contient le mot recherché", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /**
+     * Création d'une nouvelle activité pour afficher le résultat de la recherche
+     * @param listeDepense
+     */
+    public void AfficherResultat(ArrayList<Long> listeDepense)
+    {
+        Intent intention =
+                new Intent(MainActivity.this, RechercheActivity.class);
+
+        long[] tabId = new long[listeDepense.size()];
+
+        for (int i =0; i < listeDepense.size(); i++)
+        {
+            tabId[i] = listeDepense.get(i);
         }
 
-        //TODO afficher résultat recherche
+        intention.putExtra(CLE_RECHERCHE,tabId);
+
+        MainActivity.this.startActivity(intention);
     }
 
 }

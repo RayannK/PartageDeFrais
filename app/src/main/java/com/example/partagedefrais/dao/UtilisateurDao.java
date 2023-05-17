@@ -220,7 +220,9 @@ public class UtilisateurDao {
              * l'utilisateur référencé par le curseur à la liste
              */
             do {
-                aAjouter = cursorToUtilisateurs(c);
+                aAjouter = new Utilisateur(c.getLong(COLONNE_CLE));
+                aAjouter.setPrenom(c.getString(COLONNE_PRENOM));
+                aAjouter.setDepenses(depenseDao.getByUtilisateur(aAjouter.getId()));
                 listeUtilisateur.add(aAjouter);
             } while (c.moveToNext());
         }
@@ -238,9 +240,9 @@ public class UtilisateurDao {
         if (c.getCount() == 0) {
             aRenvoyer = null;
         } else {
-//            c.moveToFirst();
+            c.moveToFirst();
             // on initialise l'instance Utilisateur avec les valeurs des colonnes
-            aRenvoyer = new Utilisateur(c.getInt(COLONNE_CLE));
+            aRenvoyer = new Utilisateur(c.getLong(COLONNE_CLE));
             aRenvoyer.setPrenom(c.getString(COLONNE_PRENOM));
             aRenvoyer.setDepenses(depenseDao.getByUtilisateur(aRenvoyer.getId()));
         }

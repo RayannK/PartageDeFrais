@@ -17,4 +17,7 @@
     <string name="montant_depense">Montant de la depense : </string>
     <string name="titre_Ajout">Saisie la depense</string>
     <string name="titre_Ajout_utilisateur">Saisie de l\'utilisateur n°</string>
+
+    <string name="titre_Modif">Modifier la dépense</string>
+    <string name="calcul_total">Calculer le total des depenses</string>
 </resources>

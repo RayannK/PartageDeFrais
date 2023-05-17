@@ -19,7 +19,7 @@ import com.example.partagedefrais.model.Utilisateur;
 /**
  * @author rayann.karon
  */
-public class UtilisateurViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener  {
+public class UtilisateurViewHolder extends RecyclerView.ViewHolder {
 
     private TextView utilisateur;
     private ListView listeDepense;
@@ -29,8 +29,6 @@ public class UtilisateurViewHolder extends RecyclerView.ViewHolder implements Vi
         super(itemView);
         utilisateur = itemView.findViewById(R.id.utilisateur);
         listeDepense = itemView.findViewById(R.id.listeDepense);
-
-        listeDepense.setOnCreateContextMenuListener(this);
     }
 
     /**
@@ -48,10 +46,5 @@ public class UtilisateurViewHolder extends RecyclerView.ViewHolder implements Vi
 
         ArrayAdapter<String> adaptateur = new ArrayAdapter<String>(this.itemView.getContext(), android.R.layout.simple_list_item_1, depenses);
         listeDepense.setAdapter(adaptateur);
-    }
-
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
-        new MenuInflater(this.itemView.getContext()).inflate(R.menu.menu_context, menu);
     }
 }
