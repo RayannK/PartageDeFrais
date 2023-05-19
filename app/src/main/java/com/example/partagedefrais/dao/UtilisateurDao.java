@@ -44,10 +44,6 @@ public class UtilisateurDao {
      * Base de données contenant la description des utilisateurs
      */
     private SQLiteDatabase base;
-    /**
-     * DAO utilisé pour chercher les dépenses
-     */
-    private DepenseDao depenseDao;
 
     /**
      * Requete pour sélectionner tous les enregistrements de la table
@@ -79,7 +75,6 @@ public class UtilisateurDao {
      */
     private UtilisateurDao(Context leContexte) {
         helper = UtilisateurHelper.getInstance(leContexte, NOM_BD, null, VERSION);
-        depenseDao = DepenseDao.getInstance(leContexte);
     }
 
     /**
@@ -136,7 +131,7 @@ public class UtilisateurDao {
      * @return un entier égal au nombre de lignes supprimées
      */
     public int delete(long id) {
-        depenseDao.deleteByUtilisateur(id);
+//        depenseDao.deleteByUtilisateur(id);
 
         return base.delete(UtilisateurHelper.NOM_TABLE,
                            UtilisateurHelper.CLE + " = ?",
@@ -195,12 +190,12 @@ public class UtilisateurDao {
      * @return l'instance Utilisateur dont le nom est donné en arugment (null si non trouvé)
      */
     public Utilisateur getByDepenseId(long id) {
-        long utilisateurId = depenseDao.getById(id).getId();
+//        long utilisateurId = depenseDao.getById(id).getId();
         Cursor c = base.query(UtilisateurHelper.NOM_TABLE,
                               new String[] {UtilisateurHelper.CLE,
                                             UtilisateurHelper.PRENOM},
                               UtilisateurHelper.CLE + " = ? ",
-                              new String[] {utilisateurId+""}, null, null, null);
+                              new String[] {1+""}, null, null, null);
         Utilisateur tmp =  cursorToUtilisateurs(c);
         c.close();
         return tmp;
@@ -222,7 +217,6 @@ public class UtilisateurDao {
             do {
                 aAjouter = new Utilisateur(c.getLong(COLONNE_CLE));
                 aAjouter.setPrenom(c.getString(COLONNE_PRENOM));
-                aAjouter.setDepenses(depenseDao.getByUtilisateur(aAjouter.getId()));
                 listeUtilisateur.add(aAjouter);
             } while (c.moveToNext());
         }
@@ -244,7 +238,6 @@ public class UtilisateurDao {
             // on initialise l'instance Utilisateur avec les valeurs des colonnes
             aRenvoyer = new Utilisateur(c.getLong(COLONNE_CLE));
             aRenvoyer.setPrenom(c.getString(COLONNE_PRENOM));
-            aRenvoyer.setDepenses(depenseDao.getByUtilisateur(aRenvoyer.getId()));
         }
         return aRenvoyer;
     }

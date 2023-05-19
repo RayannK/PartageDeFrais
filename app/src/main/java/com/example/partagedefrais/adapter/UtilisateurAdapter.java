@@ -26,14 +26,14 @@ public class UtilisateurAdapter
     /**
      * Source de données à afficher par la liste
      */
-    private List<Utilisateur> lesDonnees;
+    private List<Depense> lesDonnees;
 
     /**
      * Constructeur avec en argument la liste source des données
      * @param donnees liste contenant les instances de type
      *                Depense que l'adapteur sera chargé de gérer
      */
-    public UtilisateurAdapter(List<Utilisateur> donnees) {
+    public UtilisateurAdapter(List<Depense> donnees) {
         lesDonnees = donnees;
     }
 
@@ -49,8 +49,8 @@ public class UtilisateurAdapter
     @Override
     public void onBindViewHolder(@NonNull UtilisateurViewHolder viewHolder,
                                  int position) {
-        Utilisateur user = lesDonnees.get(position);
-        viewHolder.bind(user);
+        Depense depense = lesDonnees.get(position);
+        viewHolder.bind(depense);
     }
 
     @Override
@@ -58,8 +58,8 @@ public class UtilisateurAdapter
         return lesDonnees.size();
     }
 
-    public void SetList(List<Utilisateur> utilisateurs)
+    public void SetList(List<Depense> depenses)
     {
-        this.lesDonnees = utilisateurs;
+        this.lesDonnees = depenses;
     }
 }

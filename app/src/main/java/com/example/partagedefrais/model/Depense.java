@@ -28,11 +28,17 @@ public class Depense {
     private double montant;
 
     /**
+     * Utilisateur de la dépense
+     */
+    private final Utilisateur utilisateur;
+
+    /**
      * Initilaisation d'une dépense
      * @param id clé primaire de la dépense
      */
-    public Depense(long id) {
+    public Depense(long id, Utilisateur utilisateur) {
         this.id = id;
+        this.utilisateur = utilisateur;
     }
 
     /**
@@ -41,8 +47,9 @@ public class Depense {
      * @param nom nom de la dépense
      * @param montant somme de la dépense
      */
-    public Depense(long id, String nom, double montant) {
+    public Depense(long id, Utilisateur utilisateur, String nom, double montant) {
         this.id = id;
+        this.utilisateur = utilisateur;
         this.nom = nom;
         this.montant = montant;
     }
@@ -75,6 +82,10 @@ public class Depense {
      */
     public void setMontant(double montant) {
         this.montant = montant;
+    }
+
+    public Utilisateur getUtilisateur() {
+        return utilisateur;
     }
 
     /**

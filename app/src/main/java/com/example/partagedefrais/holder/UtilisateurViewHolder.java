@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.partagedefrais.R;
+import com.example.partagedefrais.model.Depense;
 import com.example.partagedefrais.model.Utilisateur;
 
 /**
@@ -22,29 +23,25 @@ import com.example.partagedefrais.model.Utilisateur;
 public class UtilisateurViewHolder extends RecyclerView.ViewHolder {
 
     private TextView utilisateur;
-    private ListView listeDepense;
+    private TextView nom_depense;
+    private TextView valeur_depense;
 
     public UtilisateurViewHolder(
             @NonNull View itemView) {
         super(itemView);
-        utilisateur = itemView.findViewById(R.id.utilisateur);
-        listeDepense = itemView.findViewById(R.id.listeDepense);
+        utilisateur = itemView.findViewById(R.id.utilisateur_name);
+        nom_depense = itemView.findViewById(R.id.depense_name);
+        valeur_depense = itemView.findViewById(R.id.depense_valeur);
     }
 
     /**
      * Permet de placer les informations contenues dans l'argument
      * dans les widgets d'un item de la liste
-     * @param user l'instance qui doit être affichée
+     * @param depense l'instance qui doit être affichée
      */
-    public void bind(Utilisateur user) {
-        utilisateur.setText(user.getPrenom());
-        String [] depenses = new String[user.getDepenses().size()];
-
-        for (int i = 0; i < user.getDepenses().size(); i++) {
-            depenses[i] = user.getDepenses().get(i).toString();
-        }
-
-        ArrayAdapter<String> adaptateur = new ArrayAdapter<String>(this.itemView.getContext(), android.R.layout.simple_list_item_1, depenses);
-        listeDepense.setAdapter(adaptateur);
+    public void bind(Depense depense) {
+        utilisateur.setText(depense.getUtilisateur().getPrenom());
+        nom_depense.setText(depense.getNom());
+        valeur_depense.setText(depense.getMontant()+"€");
     }
 }

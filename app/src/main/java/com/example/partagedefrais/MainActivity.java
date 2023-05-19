@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private UtilisateurAdapter adaptateur;
-    private ArrayList<Utilisateur> listeUtilisateur;
+    private ArrayList<Depense> listeDepense;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
          * l'affichage des instances de type PhotoParis en tant que item de la liste.
          * Cet adapatateur est associé au RecyclerView
          */
-        adaptateur = new UtilisateurAdapter(listeUtilisateur);
+        adaptateur = new UtilisateurAdapter(listeDepense);
         utilisateurRecyclerView.setAdapter(adaptateur);
     }
 
@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
         accesDepense = DepenseDao.getInstance(this);
         accesDepense.open();
 
-        listeUtilisateur = accesUtilisateur.getAll();
+        listeDepense = accesDepense.getAll();
     }
 
     @Override
@@ -191,13 +191,13 @@ public class MainActivity extends AppCompatActivity {
                                 // on récupère un accès sur les zones de saisies de la boîte
                                 EditText nomDepense =
                                         boiteSaisie.findViewById(R.id.saisi_nom_depense);
-                                NomDepenseSaisi = DataHelper.getString(nomUtilisateur) ;
+                                NomDepenseSaisi = DataHelper.getString(nomDepense) ;
 
                                 String MontantDepenseSaisi;
                                 // on récupère un accès sur les zones de saisies de la boîte
                                 EditText montantDepense =
                                         boiteSaisie.findViewById(R.id.saisi_montant_depense);
-                                MontantDepenseSaisi = DataHelper.getString(nomUtilisateur) ;
+                                MontantDepenseSaisi = DataHelper.getString(montantDepense) ;
 
                                 // pour afficher le résultat de la recherche
                                 ajoutDepense(UtilisateurSaisi,NomDepenseSaisi,MontantDepenseSaisi);
@@ -211,9 +211,9 @@ public class MainActivity extends AppCompatActivity {
     {
 //        ArrayList<Utilisateur> listUtilisateur = accesUtilisateur.getAll();
 
-        for (Utilisateur utilisateur: listeUtilisateur) {
-            accesUtilisateur.delete(utilisateur.getId());
-        }
+//        for (Utilisateur utilisateur: listeDepense) {
+//            accesUtilisateur.delete(utilisateur.getId());
+//        }
 
         Intent myIntent = new Intent(MainActivity.this, ResetActivity.class);
         MainActivity.this.startActivity(myIntent);
@@ -234,13 +234,13 @@ public class MainActivity extends AppCompatActivity {
         }
         else
         {
-            Utilisateur utilisateur = UtilisateurDao.getInstance(this).get(prenomUtilisateur);
+            Utilisateur utilisateur = accesUtilisateur.get(prenomUtilisateur);
 
-            Depense depense = new Depense(0, nomDepense, Double.parseDouble(montantDepense));
+            Depense depense = new Depense(0,utilisateur, nomDepense, Double.parseDouble(montantDepense));
 
-            DepenseDao.getInstance(this).insert(depense, utilisateur.getId());
+            accesDepense.insert(depense, utilisateur.getId());
 
-            adaptateur.SetList(UtilisateurDao.getInstance(this).getAll());
+            adaptateur.SetList(accesDepense.getAll());
             Toast.makeText(this, "Nouvelle dépense enregistré", Toast.LENGTH_SHORT).show();
         }
     }
