@@ -8,6 +8,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.example.partagedefrais.helper.DepenseHelper;
 import com.example.partagedefrais.helper.UtilisateurHelper;
 import com.example.partagedefrais.model.Utilisateur;
 
@@ -136,6 +137,16 @@ public class UtilisateurDao {
         return base.delete(UtilisateurHelper.NOM_TABLE,
                            UtilisateurHelper.CLE + " = ?",
                                new String[] { Long.toString(id) });
+    }
+
+    /**
+     * Supprime un utilisateur ansi que ses dépenses de la table des utilisateurs
+     * @return un entier égal au nombre de lignes supprimées
+     */
+    public int deleteAll() {
+        return base.delete(UtilisateurHelper.NOM_TABLE,
+                "",
+                new String[]{});
     }
 
     /**

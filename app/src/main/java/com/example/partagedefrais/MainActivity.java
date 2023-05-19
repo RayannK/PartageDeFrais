@@ -55,6 +55,11 @@ public class MainActivity extends AppCompatActivity {
         utilisateurRecyclerView = findViewById(R.id.recycler_utilisateur);
 
         initialiseDatas();
+        if (accesUtilisateur.getAll().size() <= 0) {
+            Intent myIntent = new Intent(MainActivity.this, ResetActivity.class);
+            MainActivity.this.startActivity(myIntent);
+            finish();
+        }
 
         /*
          * On crée un gestionnaire de layout linéaire, et on l'associe à la
@@ -211,9 +216,7 @@ public class MainActivity extends AppCompatActivity {
     {
 //        ArrayList<Utilisateur> listUtilisateur = accesUtilisateur.getAll();
 
-//        for (Utilisateur utilisateur: listeDepense) {
-//            accesUtilisateur.delete(utilisateur.getId());
-//        }
+        accesDepense.deleteAll();
 
         Intent myIntent = new Intent(MainActivity.this, ResetActivity.class);
         MainActivity.this.startActivity(myIntent);
