@@ -83,10 +83,6 @@ public class MainActivity extends AppCompatActivity {
         accesDepense.open();
 
         listeUtilisateur = accesUtilisateur.getAll();
-<<<<<<< HEAD
-=======
-
->>>>>>> refs/remotes/origin/main
     }
 
     @Override
@@ -155,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
                                 // on récupère un accès sur les zones de saisies de la boîte
                                 EditText motRecherche =
                                         boiteSaisie.findViewById(R.id.saisi_mot_recherche);
-                                alimentSaisi = DataHelper.getString(nomAliment) ;
+                                motSaisi = DataHelper.getString(motRecherche) ;
                                 // pour afficher le résultat de la recherche
                                 rechercheDepense(motSaisi);
                             }
