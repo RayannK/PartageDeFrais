@@ -146,7 +146,7 @@ public class DepenseDao {
 
         // insertion de l'enregistrement dans la base
         return base.insert(DepenseHelper.NOM_TABLE,
-                DepenseHelper.NOM, enregistrement);
+                DepenseHelper.CLE, enregistrement);
     }
 
     /**
@@ -273,7 +273,7 @@ public class DepenseDao {
              * le dépense référencé par le curseur à la liste
              */
             do {
-                Utilisateur user = utilisateurDao.getByDepenseId(c.getLong(COLONNE_CLE_UTILISATEUR));
+                Utilisateur user = utilisateurDao.getById(c.getLong(COLONNE_CLE_UTILISATEUR));
 
                 aAjouter = new Depense(c.getLong(COLONNE_CLE), user);
                 aAjouter.setNom(c.getString(COLONNE_NOM));
@@ -298,7 +298,7 @@ public class DepenseDao {
             aRenvoyer = null;
         } else {
             c.moveToFirst();
-            Utilisateur user = utilisateurDao.getByDepenseId(c.getLong(COLONNE_CLE_UTILISATEUR));
+            Utilisateur user = utilisateurDao.getById(c.getLong(COLONNE_CLE_UTILISATEUR));
 
             // on initialise l'instance Depense avec les valeurs des colonnes
             aRenvoyer = new Depense(c.getLong(COLONNE_CLE), user);

@@ -18,11 +18,11 @@
         android:textSize="@dimen/text_size"
         android:gravity="center"/>
 
+    <View style="@style/separator"/>
+
     <ListView
         android:id="@+id/resultatListView_bilan"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/teal_200">
-
-    </ListView>
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal" />
 </LinearLayout>

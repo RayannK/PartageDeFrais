@@ -17,7 +17,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.partagedefrais.adapter.UtilisateurAdapter;
@@ -174,6 +176,14 @@ public class MainActivity extends AppCompatActivity {
 
         // on désérialise le layout qui est associé à la boîte de saisie d'un pays
         final View boiteSaisie = getLayoutInflater().inflate(R.layout.ajout_depense, null);
+        Spinner spinner = (Spinner) boiteSaisie.findViewById(R.id.search_user_spinner);
+        ArrayList<String> users = new ArrayList<>();
+        for (Utilisateur user: accesUtilisateur.getAll()) {
+            users.add(user.getPrenom());
+        }
+        ArrayAdapter<String> adaptateur = new ArrayAdapter<String>(this.getApplicationContext(), android.R.layout.simple_spinner_item, users);
+        adaptateur.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adaptateur);
 
         /*
          * Création d'une boîte de dialogue pour saisir un aliment
@@ -187,11 +197,7 @@ public class MainActivity extends AppCompatActivity {
                             // méthode invoquée lorsque l'utilisateur validera la saisie
                             public void onClick(DialogInterface dialog,
                                                 int leBouton) {
-                                String UtilisateurSaisi;
-                                // on récupère un accès sur les zones de saisies de la boîte
-                                EditText nomUtilisateur =
-                                        boiteSaisie.findViewById(R.id.saisi_nom_utilisateur);
-                                UtilisateurSaisi = DataHelper.getString(nomUtilisateur) ;
+                                String UtilisateurSaisi =  spinner.getSelectedItem().toString();
 
                                 String NomDepenseSaisi;
                                 // on récupère un accès sur les zones de saisies de la boîte

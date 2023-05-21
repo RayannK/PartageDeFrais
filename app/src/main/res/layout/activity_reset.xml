@@ -3,40 +3,88 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/reset_titre"
+                android:textSize="@dimen/titre_size"
+                android:gravity="center"/>
 
-    <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Une journée ne comporte que 24h"
-            android:textSize="25sp"
-            android:gravity="center"/>
-    <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Aucune liste n'est définie"
-            android:textSize="@dimen/text_size"
-            android:gravity="center"/>
+        <View style="@style/separator"/>
+
+
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/reset_zone_creer">
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/reset_saisie_nombre"/>
+                <EditText
+                        android:id="@+id/reset_saisie_nombre_utilisateur"
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:inputType="number"/>
+        </LinearLayout>
+
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/creer"
+                android:id="@+id/btn_reset_creer" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/reset_zone_ajout">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/reset_user"
+            android:gravity="center"
+            android:id="@+id/reset_nom_utilisateur"/>
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
             <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Saisir le nombre d'utilisateur : "/>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/reset_saisie_nom_utilisateur"/>
             <EditText
-                    android:id="@+id/reset_saisi_nombre_utilisateur"
-                    android:layout_height="wrap_content"
-                    android:layout_width="match_parent"
-                    android:inputType="number"/>
-    </LinearLayout>
+                android:id="@+id/reset_saisie_nom_utilisateur"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:inputType="text"
+                android:maxLines="1" />
+        </LinearLayout>
 
-    <Button
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="créer"
-            android:id="@+id/btn_reset_creer"
-            />
-
+            android:orientation="horizontal"
+            android:gravity="center">
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/titre_size"
+                android:text="@string/ajouter"
+                android:id="@+id/btn_reset_ajouter" />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/annuler"
+                android:id="@+id/btn_reset_annuler" />
+        </LinearLayout>
+    </LinearLayout>
 </LinearLayout>

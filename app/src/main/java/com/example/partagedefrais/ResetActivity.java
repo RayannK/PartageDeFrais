@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,50 +33,38 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class ResetActivity extends AppCompatActivity implements View.OnClickListener {
 
     private EditText editNombreUtilisateur;
+    private EditText editNomUtilisateur;
+    private TextView textNomUtilisateur;
     private Button btnResetCreer;
-
-    /**
-     * Objet destiné à faciliter l'accès à la table des dépenses
-     */
-    private UtilisateurDao accesUtilisateur;
-
-    private AlertDialog addUserDialog;
-
-    private List<Utilisateur> users;
+    private Button btnResetAjouter;
+    private Button btnResetAnnuler;
+    private LinearLayout viewAjout;
+    private LinearLayout viewCreer;
+    private int numUtilisateur;
+    private int currentNumUtilisateur;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reset);
 
+        numUtilisateur = 0;
 
-        accesUtilisateur = UtilisateurDao.getInstance(this);
-        accesUtilisateur.open();
-
-        editNombreUtilisateur = findViewById(R.id.reset_saisi_nombre_utilisateur);
+        editNombreUtilisateur = findViewById(R.id.reset_saisie_nombre_utilisateur);
+        editNomUtilisateur = findViewById(R.id.reset_saisie_nom_utilisateur);
+        textNomUtilisateur = findViewById(R.id.reset_nom_utilisateur);
         btnResetCreer = findViewById(R.id.btn_reset_creer);
+        btnResetAjouter = findViewById(R.id.btn_reset_ajouter);
+        btnResetAnnuler = findViewById(R.id.btn_reset_annuler);
+
+        viewAjout = findViewById(R.id.reset_zone_ajout);
+        viewAjout.setVisibility(View.INVISIBLE);
+
+        viewCreer = findViewById(R.id.reset_zone_creer);
+
         btnResetCreer.setOnClickListener(this);
-
-
-        // on désérialise le layout qui est associé à la boîte de saisie d'un pays
-        final View boiteSaisie = getLayoutInflater().inflate(R.layout.ajout_utilisateur, null);
-
-        addUserDialog = (new AlertDialog.Builder(this)
-                .setView(boiteSaisie)
-                .setPositiveButton(getResources().getString(R.string.bouton_positif),
-                        (dialog, leBouton) -> {
-                            EditText editNomUtilisateur = boiteSaisie.findViewById(R.id.reset_saisi_nom_utilisateur);
-
-                            String nomUtilisateur = DataHelper.getString(editNomUtilisateur);
-
-                            if (DataHelper.isStringEmptyOrNull(nomUtilisateur)) {
-//                                       index--;
-                                Toast.makeText(this.getApplicationContext(), "Aucun nom n'a été saisie", Toast.LENGTH_SHORT).show();
-                            }
-
-                            users.add(new Utilisateur(0, nomUtilisateur));
-                        })
-                .setNegativeButton(getResources().getString(R.string.bouton_negatif), null).create());
+        btnResetAjouter.setOnClickListener(this);
+        btnResetAnnuler.setOnClickListener(this);
     }
 
     @Override
@@ -85,43 +75,36 @@ public class ResetActivity extends AppCompatActivity implements View.OnClickList
                 if (nbUtilisateur <= 0) {
                     break;
                 }
+                viewAjout.setVisibility(View.VISIBLE);
+                viewCreer.setVisibility(View.INVISIBLE);
+                numUtilisateur = nbUtilisateur;
+                currentNumUtilisateur = 1;
+                textNomUtilisateur.setText(getString(R.string.reset_user) + currentNumUtilisateur);
+                break;
+            case R.id.btn_reset_ajouter:
+                String nomUser = DataHelper.getString(editNomUtilisateur);
+                if (!DataHelper.isStringEmptyOrNull(nomUser)) {
+                    UtilisateurDao accesUtilisateur = UtilisateurDao.getInstance(this);
+                    accesUtilisateur.open();
 
-                users = addUser(nbUtilisateur);
+                    accesUtilisateur.insert(new Utilisateur(0,nomUser));
 
-                for (Utilisateur user : users) {
-                    accesUtilisateur.insert(user);
+                    accesUtilisateur.close();
+
+                    currentNumUtilisateur++;
+                    editNomUtilisateur.setText("");
                 }
-
-//                Intent myIntent = new Intent(ResetActivity.this, MainActivity.class);
-//                ResetActivity.this.startActivity(myIntent);
-//                finish();
-
+                if (currentNumUtilisateur > numUtilisateur) {
+                    Intent myIntent = new Intent(ResetActivity.this, MainActivity.class);
+                    ResetActivity.this.startActivity(myIntent);
+                    finish();
+                }
+                textNomUtilisateur.setText(getString(R.string.reset_user) + currentNumUtilisateur);
+                break;
+            case R.id.btn_reset_annuler:
+                viewAjout.setVisibility(View.INVISIBLE);
+                viewCreer.setVisibility(View.VISIBLE);
                 break;
         }
-    }
-
-    public synchronized List<Utilisateur> addUser(int number) {
-        List<Utilisateur> users = new ArrayList<>();
-
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                String titre = getResources().getString(R.string.titre_Ajout_utilisateur);
-
-                // méthode invoquée lorsque l'utilisateur validera la saisie
-
-                for (int index = 0; index < number; index++) {
-                    addUserDialog.setTitle(titre + (users.size()+1));
-                    addUserDialog.show();
-                }
-            }
-        });
-        return users;
-    }
-
-    @Override
-    public void onDestroy() {
-        accesUtilisateur.close();
-        super.onDestroy();
     }
 }

@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.partagedefrais.R;
+import com.example.partagedefrais.helper.DataHelper;
 import com.example.partagedefrais.model.Depense;
 import com.example.partagedefrais.model.Utilisateur;
 
@@ -42,6 +43,6 @@ public class UtilisateurViewHolder extends RecyclerView.ViewHolder {
     public void bind(Depense depense) {
         utilisateur.setText(depense.getUtilisateur().getPrenom());
         nom_depense.setText(depense.getNom());
-        valeur_depense.setText(depense.getMontant()+"€");
+        valeur_depense.setText(DataHelper.formatDouble(depense.getMontant())+"€");
     }
 }

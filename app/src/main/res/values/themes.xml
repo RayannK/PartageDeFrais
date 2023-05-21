@@ -13,4 +13,12 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+
+    <style name="separator">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/separator_height</item>
+        <item name="android:background">@color/black</item>
+        <item name="android:layout_marginTop">@dimen/separation_padding</item>
+        <item name="android:layout_marginBottom">@dimen/separation_padding</item>
+    </style>
 </resources>

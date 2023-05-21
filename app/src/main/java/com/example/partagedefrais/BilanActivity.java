@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.partagedefrais.dao.DepenseDao;
 import com.example.partagedefrais.dao.UtilisateurDao;
+import com.example.partagedefrais.helper.DataHelper;
 import com.example.partagedefrais.model.Depense;
 import com.example.partagedefrais.model.Utilisateur;
 
@@ -35,19 +36,19 @@ public class BilanActivity extends AppCompatActivity {
 
         Double sommeDepense = 0.0;
 
-        for (Depense depense: listeDepense) {
-            sommeDepense +=  depense.getMontant();
+        for (Depense depense : listeDepense) {
+            sommeDepense += depense.getMontant();
         }
 
         depenseTotal = findViewById(R.id.bilan_final);
 
         bilanPart = findViewById(R.id.bilan_part);
 
-        depenseTotal.setText("La somme total des dépense est de : "+sommeDepense);
+        depenseTotal.setText("La somme total des dépense est de : " + DataHelper.formatDouble(sommeDepense) + " €");
 
         Double partUtilisateur = sommeDepense / listeUtilisateur.size();
 
-        bilanPart.setText("Chaque utilisateur doit donc payer : "+partUtilisateur);
+        bilanPart.setText("Chaque utilisateur doit donc payer : " + DataHelper.formatDouble(partUtilisateur) + " €");
 
 
         String[] bilanUtilisateur = calculBilanUtilissateur(listeDepense, listeUtilisateur, partUtilisateur);
@@ -63,27 +64,23 @@ public class BilanActivity extends AppCompatActivity {
         String[] bilanUtilisateur = new String[utilisateurs.size()];
 
 
-        for (int i =0; i < utilisateurs.size(); i++) {
+        for (int i = 0; i < utilisateurs.size(); i++) {
             double depenseUtilisateur = 0.0;
 
             for (Depense depense : depenses) {
-                if (utilisateurs.get(i).getId() == depense.getUtilisateur().getId())
-                {
+                if (utilisateurs.get(i).getId() == depense.getUtilisateur().getId()) {
                     depenseUtilisateur += depense.getMontant();
                 }
             }
 
             double delta = depenseUtilisateur - partUtilisateur;
 
-            if (delta > 0)
-            {
-                bilanUtilisateur[i] = utilisateurs.get(i).getPrenom()+" à payer "+depenseUtilisateur+" euros de dépense."
-                        + " Il doit être remboursé de : "+delta+" euros";
-            }
-            else
-            {
-                bilanUtilisateur[i] = utilisateurs.get(i).getPrenom()+" à payer "+depenseUtilisateur+" euros de dépense."
-                        +"Il doit payer : "+(-delta)+" euros";
+            if (delta > 0) {
+                bilanUtilisateur[i] = utilisateurs.get(i).getPrenom() + " à payer " + DataHelper.formatDouble(depenseUtilisateur) + " euros de dépense."
+                        + "\n\nIl doit être remboursé de : " + DataHelper.formatDouble(delta) + " €";
+            } else {
+                bilanUtilisateur[i] = utilisateurs.get(i).getPrenom() + " à payer " + DataHelper.formatDouble(depenseUtilisateur) + " euros de dépense."
+                        + "\n\nIl doit payer : " + DataHelper.formatDouble(-delta) + " €";
             }
         }
 

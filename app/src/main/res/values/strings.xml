@@ -20,4 +20,10 @@
 
     <string name="titre_Modif">Modifier la dépense</string>
     <string name="calcul_total">Calculer le total des depenses</string>
+    <string name="reset_titre">Aucune liste n\'est définie</string>
+    <string name="reset_saisie_nombre">Saisir le nombre d\'utilisateur :</string>
+    <string name="reset_saisie_nom_utilisateur">Nom de l\'utilisateur :</string>
+    <string name="ajouter">Ajouter</string>
+    <string name="creer">Créer</string>
+    <string name="reset_user">Utilisateur n°</string>
 </resources>

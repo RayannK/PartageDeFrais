@@ -8,14 +8,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Résultat de la recherche"
-        android:textSize="@dimen/text_size"
+        android:textSize="@dimen/titre_size"
         android:gravity="center"/>
+
+    <View style="@style/separator"/>
 
     <ListView
         android:id="@+id/resultatListView_depense"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/teal_200">
+        android:layout_height="match_parent">
 
     </ListView>
 </LinearLayout>

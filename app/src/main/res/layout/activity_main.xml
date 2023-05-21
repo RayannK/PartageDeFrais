@@ -8,11 +8,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Liste des dépenses"
-            android:textSize="@dimen/text_size"
+            android:textSize="@dimen/titre_size"
             android:gravity="center"/>
+
+    <View style="@style/separator"/>
+
     <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_utilisateur"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
-
 </LinearLayout>
