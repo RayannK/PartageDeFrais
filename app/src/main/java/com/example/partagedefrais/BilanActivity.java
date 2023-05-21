@@ -43,7 +43,7 @@ public class BilanActivity extends AppCompatActivity {
 
         bilanPart = findViewById(R.id.bilan_part);
 
-        depenseTotal.setText("La somme total des dépense est de : "+depenseTotal);
+        depenseTotal.setText("La somme total des dépense est de : "+sommeDepense);
 
         Double partUtilisateur = sommeDepense / listeUtilisateur.size();
 
@@ -77,11 +77,13 @@ public class BilanActivity extends AppCompatActivity {
 
             if (delta > 0)
             {
-                bilanUtilisateur[i] = utilisateurs.get(i).getPrenom()+" doit être remboursé de : "+delta+" euros";
+                bilanUtilisateur[i] = utilisateurs.get(i).getPrenom()+" à payer "+depenseUtilisateur+" euros de dépense."
+                        + " Il doit être remboursé de : "+delta+" euros";
             }
             else
             {
-                bilanUtilisateur[i] = utilisateurs.get(i).getPrenom()+" doit payer : "+delta+" euros";
+                bilanUtilisateur[i] = utilisateurs.get(i).getPrenom()+" à payer "+depenseUtilisateur+" euros de dépense."
+                        +"Il doit payer : "+(-delta)+" euros";
             }
         }
 
