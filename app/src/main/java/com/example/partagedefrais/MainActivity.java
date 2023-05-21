@@ -120,6 +120,7 @@ public class MainActivity extends AppCompatActivity {
                 saisirRechercherMot();
                 break;
             case R.id.calcul_final:
+                AfficherBilan();
 
                 break;
             case R.id.option_reset:
@@ -297,6 +298,17 @@ public class MainActivity extends AppCompatActivity {
         }
 
         intention.putExtra(CLE_RECHERCHE,tabId);
+
+        MainActivity.this.startActivity(intention);
+    }
+
+    /**
+     * Création d'une nouvelle activité pour afficher le bilan des dépenses
+     */
+    public void AfficherBilan()
+    {
+        Intent intention =
+                new Intent(MainActivity.this, BilanActivity.class);
 
         MainActivity.this.startActivity(intention);
     }

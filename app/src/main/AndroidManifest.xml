@@ -23,6 +23,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".RechercheActivity"></activity>
+        <activity android:name=".BilanActivity"></activity>
     </application>
 
 </manifest>
