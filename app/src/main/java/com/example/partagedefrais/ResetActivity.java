@@ -157,7 +157,8 @@ public class ResetActivity extends AppCompatActivity
                 }
                 switchMode(true);
                 textNomUtilisateur.setText(getString(R.string.reset_user) +
-                                           (addingUtilisateur.size() + 1));
+                                           (addingUtilisateur.size() + 1) +
+                                           " / " + numUtilisateur);
                 break;
             case R.id.btn_reset_ajouter:
                 // récupère le nom saisie
