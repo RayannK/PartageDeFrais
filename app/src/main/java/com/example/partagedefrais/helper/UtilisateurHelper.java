@@ -73,8 +73,8 @@ public class UtilisateurHelper extends SQLiteOpenHelper {
      * @param version  entier égal au numéro de version du schéma de la base de données
      */
     private UtilisateurHelper(Context contexte, String nom,
-                             SQLiteDatabase.CursorFactory fabrique,
-                             int version) {
+                              SQLiteDatabase.CursorFactory fabrique,
+                              int version) {
         super(contexte, nom, fabrique, version);
     }
 
@@ -86,11 +86,13 @@ public class UtilisateurHelper extends SQLiteOpenHelper {
         ContentValues enregistrement = new ContentValues();
         enregistrement.put(UtilisateurHelper.PRENOM, "Jonny");
         // insertion de l'enregistrement dans la base
-        base.insert(UtilisateurHelper.NOM_TABLE, UtilisateurHelper.PRENOM, enregistrement);
+        base.insert(UtilisateurHelper.NOM_TABLE, UtilisateurHelper.PRENOM,
+                    enregistrement);
 
         enregistrement.put(UtilisateurHelper.PRENOM, "Albert");
         // insertion de l'enregistrement dans la base
-        base.insert(UtilisateurHelper.NOM_TABLE, UtilisateurHelper.PRENOM, enregistrement);
+        base.insert(UtilisateurHelper.NOM_TABLE, UtilisateurHelper.PRENOM,
+                    enregistrement);
 
     }
 

@@ -17,7 +17,6 @@ import java.util.ArrayList;
 /**
  * Gestion de l'ouverture de la base de données et sa fermeture (ainsi que la fermeture de la connexion).
  * Intérogation base de données et permet des mises à jour sur la table des dépenses.
- *
  * @author rayann.karon
  */
 public class DepenseDao {
@@ -65,8 +64,8 @@ public class DepenseDao {
      */
     public static final String REQUETE_TOUT_SELECTIONNER =
             "select *"
-                    + " from " + DepenseHelper.NOM_TABLE
-                    + ";";
+            + " from " + DepenseHelper.NOM_TABLE
+            + ";";
 
     /**
      * Instance de DepenseDao : elle sera unique au sein de l'application
@@ -75,14 +74,14 @@ public class DepenseDao {
 
     /**
      * Création si besoin d'une instance de type DepenseDao, et renvoie de celle-ci
-     *
      * @param context contexte de l'activité à l'origine de l'appel
      * @return une instance de type DepenseDao pour accéder ensuite à la base de données
      */
     public static synchronized DepenseDao getInstance(Context context) {
         if (instanceDepenseDao == null) {
             // l'instance n'existe pas encore : on la crée
-            instanceDepenseDao = new DepenseDao(context.getApplicationContext());
+            instanceDepenseDao = new DepenseDao(
+                    context.getApplicationContext());
         }
         return instanceDepenseDao;
     }
@@ -113,7 +112,6 @@ public class DepenseDao {
 
     /**
      * Renvoie d'un curseur sur la totalité des dépenses
-     *
      * @return un curseur référençant toutes les dépenses de la base
      */
     public Cursor getCurseur() {
@@ -122,7 +120,6 @@ public class DepenseDao {
 
     /**
      * Renvoie toutes les dépenses présentes dans la table, sous la forme d'une liste
-     *
      * @return une ArrayList contenant toutes les dépenses de la table
      */
     public ArrayList<Depense> getAll() {
@@ -134,7 +131,6 @@ public class DepenseDao {
 
     /**
      * Insère la dépense argument dans la table des dépenses
-     *
      * @param aInserer dépense à insérer dans la table
      * @return l'identifiant de l'enregistrement inséré (ou -1 si ajout impossible)
      */
@@ -146,52 +142,24 @@ public class DepenseDao {
 
         // insertion de l'enregistrement dans la base
         return base.insert(DepenseHelper.NOM_TABLE,
-                DepenseHelper.CLE, enregistrement);
+                           DepenseHelper.CLE, enregistrement);
     }
 
     /**
      * Supprime une dépense de la table des dépense
-     *
-     * @param id identifiant de la dépense à supprimer
-     * @return un entier égal au nombre de lignes supprimées
-     */
-    public int delete(long id) {
-        utilisateurDao.delete(getById(id).getUtilisateur().getId());
-
-        return base.delete(DepenseHelper.NOM_TABLE,
-                DepenseHelper.CLE + " = ?",
-                new String[]{id + ""});
-    }
-
-    /**
-     * Supprime une dépense de la table des dépense
-     *
      * @return un entier égal au nombre de lignes supprimées
      */
     public int deleteAll() {
         utilisateurDao.deleteAll();
 
         return base.delete(DepenseHelper.NOM_TABLE,
-                "",
-                new String[]{});
-    }
-
-    /**
-     * Supprime une dépense de la table des dépense
-     *
-     * @param id identifiant de l'utilisateur dont les dépenses sont a supprimer
-     * @return un entier égal au nombre de lignes supprimées
-     */
-    public int deleteByUtilisateur(long id) {
-        return base.delete(DepenseHelper.NOM_TABLE,
-                DepenseHelper.CLE_UTILISATEUR + " = ?",
-                new String[]{Long.toString(id)});
+                           "",
+                           new String[]{});
     }
 
     /**
      * Modifie une dépense avec l'instance de type Depense argument.
      * L'enregistrement à modifier est recherché selon le nom de la dépense argument
-     *
      * @param aModifier nouvelle valeur pour la dépense à modifier
      * @return un entier égal au nombre d'enregistrements modifiés
      */
@@ -200,67 +168,32 @@ public class DepenseDao {
         nouveau.put(DepenseHelper.NOM, aModifier.getNom());
         nouveau.put(DepenseHelper.MONTANT, aModifier.getMontant());
         return base.update(DepenseHelper.NOM_TABLE, nouveau,
-                DepenseHelper.NOM + " = ?",
-                new String[]{aModifier.getNom()});
+                           DepenseHelper.NOM + " = ?",
+                           new String[]{aModifier.getNom()});
     }
 
     /**
      * Recherche dans la table des dépenses, la dépense dont le nom est donné en argument
-     *
-     * @param nom nom de la dépense à chercher dans la table des dépenses
-     * @return l'instance Depense dont le nom est donné en arugment (null si non trouvé)
-     */
-    public Depense get(String nom) {
-        Cursor c = base.query(DepenseHelper.NOM_TABLE,
-                new String[]{DepenseHelper.CLE,
-                        DepenseHelper.NOM,
-                        DepenseHelper.CLE_UTILISATEUR},
-                DepenseHelper.NOM + " = ? ",
-                new String[]{nom}, null, null, null);
-        Depense tmp = cursorToDepenses(c);
-        c.close();
-        return tmp;
-    }
-
-    /**
-     * Recherche dans la table des dépenses, la dépense dont le nom est donné en argument
-     *
      * @param id identifiant de la dépense à chercher dans la table des dépenses
      * @return l'instance Depense dont le nom est donné en arugment (null si non trouvé)
      */
     public Depense getById(long id) {
         Cursor c = base.query(DepenseHelper.NOM_TABLE,
-                new String[]{DepenseHelper.CLE,
-                        DepenseHelper.NOM,
-                        DepenseHelper.CLE_UTILISATEUR},
-                DepenseHelper.CLE + " = ? ",
-                new String[]{id + ""}, null, null, null);
+                              new String[]{
+                                      DepenseHelper.CLE,
+                                      DepenseHelper.NOM,
+                                      DepenseHelper.MONTANT,
+                                      DepenseHelper.CLE_UTILISATEUR
+                              },
+                              DepenseHelper.CLE + " = ? ",
+                              new String[]{id + ""}, null, null, null);
         Depense tmp = cursorToDepenses(c);
-        c.close();
-        return tmp;
-    }
-
-    /**
-     * Recherche dans la table des dépenses, la dépense dont le nom est donné en argument
-     *
-     * @param id identifiant de l'utilisateur à chercher dans la table des dépenses
-     * @return l'instance Depense dont le nom est donné en arugment (null si non trouvé)
-     */
-    public ArrayList<Depense> getByUtilisateur(long id) {
-        Cursor c = base.query(DepenseHelper.NOM_TABLE,
-                new String[]{DepenseHelper.CLE,
-                        DepenseHelper.NOM,
-                        DepenseHelper.CLE_UTILISATEUR},
-                DepenseHelper.CLE_UTILISATEUR + " = ? ",
-                new String[]{Long.toString(id)}, null, null, null);
-        ArrayList<Depense> tmp = cursorToListeDepenses(c);
         c.close();
         return tmp;
     }
 
     /**
      * Transforme l'ensemble des dépenses contenus dans un curseur en une liste de dépense
-     *
      * @param c un curseur sur un ensemble de dépense
      * @return une liste contenant les dépenses référencés par le curseur
      */
@@ -273,7 +206,8 @@ public class DepenseDao {
              * le dépense référencé par le curseur à la liste
              */
             do {
-                Utilisateur user = utilisateurDao.getById(c.getLong(COLONNE_CLE_UTILISATEUR));
+                Utilisateur user = utilisateurDao.getById(
+                        c.getLong(COLONNE_CLE_UTILISATEUR));
 
                 aAjouter = new Depense(c.getLong(COLONNE_CLE), user);
                 aAjouter.setNom(c.getString(COLONNE_NOM));
@@ -287,7 +221,6 @@ public class DepenseDao {
     /**
      * Transforme la première ligne référencée par un curseur
      * (sur la table des dépenses) en instance de type Dépense
-     *
      * @param c curseur qui référence une ligne dans la table des dépenses
      * @return une instance de type Dépense correspondant à celui référencé par
      * le curseur (éventuellement null)
@@ -298,7 +231,8 @@ public class DepenseDao {
             aRenvoyer = null;
         } else {
             c.moveToFirst();
-            Utilisateur user = utilisateurDao.getById(c.getLong(COLONNE_CLE_UTILISATEUR));
+            Utilisateur user = utilisateurDao.getById(
+                    c.getLong(COLONNE_CLE_UTILISATEUR));
 
             // on initialise l'instance Depense avec les valeurs des colonnes
             aRenvoyer = new Depense(c.getLong(COLONNE_CLE), user);

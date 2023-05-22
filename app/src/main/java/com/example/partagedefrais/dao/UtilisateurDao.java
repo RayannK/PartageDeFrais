@@ -8,7 +8,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.example.partagedefrais.helper.DepenseHelper;
 import com.example.partagedefrais.helper.UtilisateurHelper;
 import com.example.partagedefrais.model.Utilisateur;
 
@@ -54,7 +53,9 @@ public class UtilisateurDao {
             + " from " + UtilisateurHelper.NOM_TABLE
             + ";";
 
-    /** Instance de UtilisateurDao : elle sera unique au sein de l'application */
+    /**
+     * Instance de UtilisateurDao : elle sera unique au sein de l'application
+     */
     private static UtilisateurDao instanceUtilisateurDao;
 
     /**
@@ -65,7 +66,8 @@ public class UtilisateurDao {
     public static synchronized UtilisateurDao getInstance(Context context) {
         if (instanceUtilisateurDao == null) {
             // l'instance n'existe pas encore : on la crée
-            instanceUtilisateurDao = new UtilisateurDao(context.getApplicationContext());
+            instanceUtilisateurDao = new UtilisateurDao(
+                    context.getApplicationContext());
         }
         return instanceUtilisateurDao;
     }
@@ -75,7 +77,8 @@ public class UtilisateurDao {
      * * @param leContexte contexte de l'activité créatrice
      */
     private UtilisateurDao(Context leContexte) {
-        helper = UtilisateurHelper.getInstance(leContexte, NOM_BD, null, VERSION);
+        helper = UtilisateurHelper.getInstance(leContexte, NOM_BD, null,
+                                               VERSION);
     }
 
     /**
@@ -98,7 +101,7 @@ public class UtilisateurDao {
      * @return un curseur référençant tous les utilisateurs de la base
      */
     public Cursor getCurseur() {
-        return base.rawQuery(REQUETE_TOUT_SELECTIONNER, null );
+        return base.rawQuery(REQUETE_TOUT_SELECTIONNER, null);
     }
 
     /**
@@ -132,11 +135,9 @@ public class UtilisateurDao {
      * @return un entier égal au nombre de lignes supprimées
      */
     public int delete(long id) {
-//        depenseDao.deleteByUtilisateur(id);
-
         return base.delete(UtilisateurHelper.NOM_TABLE,
                            UtilisateurHelper.CLE + " = ?",
-                               new String[] { Long.toString(id) });
+                           new String[]{Long.toString(id)});
     }
 
     /**
@@ -145,8 +146,8 @@ public class UtilisateurDao {
      */
     public int deleteAll() {
         return base.delete(UtilisateurHelper.NOM_TABLE,
-                "",
-                new String[]{});
+                           "",
+                           new String[]{});
     }
 
     /**
@@ -158,9 +159,9 @@ public class UtilisateurDao {
     public int update(Utilisateur aModifier) {
         ContentValues nouveau = new ContentValues();
         nouveau.put(UtilisateurHelper.PRENOM, aModifier.getPrenom());
-        return base.update(UtilisateurHelper.NOM_TABLE , nouveau,
-                               UtilisateurHelper.PRENOM + " = ?",
-                               new String[] {aModifier.getPrenom()} );
+        return base.update(UtilisateurHelper.NOM_TABLE, nouveau,
+                           UtilisateurHelper.PRENOM + " = ?",
+                           new String[]{aModifier.getPrenom()});
     }
 
     /**
@@ -170,11 +171,13 @@ public class UtilisateurDao {
      */
     public Utilisateur get(String prenom) {
         Cursor c = base.query(UtilisateurHelper.NOM_TABLE,
-                              new String[] {UtilisateurHelper.CLE,
-                                            UtilisateurHelper.PRENOM},
+                              new String[]{
+                                      UtilisateurHelper.CLE,
+                                      UtilisateurHelper.PRENOM
+                              },
                               UtilisateurHelper.PRENOM + " = ? ",
-                              new String[] {prenom}, null, null, null);
-        Utilisateur tmp =  cursorToUtilisateurs(c);
+                              new String[]{prenom}, null, null, null);
+        Utilisateur tmp = cursorToUtilisateurs(c);
         c.close();
         return tmp;
     }
@@ -186,28 +189,13 @@ public class UtilisateurDao {
      */
     public Utilisateur getById(long id) {
         Cursor c = base.query(UtilisateurHelper.NOM_TABLE,
-                              new String[] {UtilisateurHelper.CLE,
-                                            UtilisateurHelper.PRENOM},
+                              new String[]{
+                                      UtilisateurHelper.CLE,
+                                      UtilisateurHelper.PRENOM
+                              },
                               UtilisateurHelper.CLE + " = ? ",
-                              new String[] {id+""}, null, null, null);
-        Utilisateur tmp =  cursorToUtilisateurs(c);
-        c.close();
-        return tmp;
-    }
-
-    /**
-     * Recherche dans la table des utilisateurs, l'utilisateur dont le nom est donné en argument
-     * @param id identifiant de la dépense à chercher dans la table des utilisateurs
-     * @return l'instance Utilisateur dont le nom est donné en arugment (null si non trouvé)
-     */
-    public Utilisateur getByDepenseId(long id) {
-//        long utilisateurId = depenseDao.getById(id).getId();
-        Cursor c = base.query(UtilisateurHelper.NOM_TABLE,
-                              new String[] {UtilisateurHelper.CLE,
-                                            UtilisateurHelper.PRENOM},
-                              UtilisateurHelper.CLE + " = ? ",
-                              new String[] {1+""}, null, null, null);
-        Utilisateur tmp =  cursorToUtilisateurs(c);
+                              new String[]{id + ""}, null, null, null);
+        Utilisateur tmp = cursorToUtilisateurs(c);
         c.close();
         return tmp;
     }
@@ -233,6 +221,7 @@ public class UtilisateurDao {
         }
         return listeUtilisateur;
     }
+
     /**
      * Transforme la première ligne référencée par un curseur
      * (sur la table des utilisateur) en instance de type Utilisateur

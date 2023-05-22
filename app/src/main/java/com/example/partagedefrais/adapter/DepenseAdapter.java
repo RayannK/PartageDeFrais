@@ -1,4 +1,4 @@
-/* UtilisateurAdapter.java                                        10 mai 2023
+/* DepenseAdapter.java                                        10 mai 2023
  * IUT Rodez, no copyright
  */
 package com.example.partagedefrais.adapter;
@@ -13,15 +13,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.partagedefrais.R;
 import com.example.partagedefrais.holder.UtilisateurViewHolder;
 import com.example.partagedefrais.model.Depense;
-import com.example.partagedefrais.model.Utilisateur;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @author rayann.karon
  */
-public class UtilisateurAdapter
+public class DepenseAdapter
         extends RecyclerView.Adapter<UtilisateurViewHolder> {
     /**
      * Source de données à afficher par la liste
@@ -33,7 +31,7 @@ public class UtilisateurAdapter
      * @param donnees liste contenant les instances de type
      *                Depense que l'adapteur sera chargé de gérer
      */
-    public UtilisateurAdapter(List<Depense> donnees) {
+    public DepenseAdapter(List<Depense> donnees) {
         lesDonnees = donnees;
     }
 
@@ -41,8 +39,9 @@ public class UtilisateurAdapter
     public UtilisateurViewHolder onCreateViewHolder(ViewGroup viewGroup,
                                                     int viewType) {
         View view = LayoutInflater.from(
-                viewGroup.getContext()).inflate(R.layout.vue_depense_utilisateur,
-                                                viewGroup, false);
+                                          viewGroup.getContext())
+                                  .inflate(R.layout.vue_depense_utilisateur,
+                                           viewGroup, false);
         return new UtilisateurViewHolder(view);
     }
 
@@ -58,8 +57,7 @@ public class UtilisateurAdapter
         return lesDonnees.size();
     }
 
-    public void SetList(List<Depense> depenses)
-    {
+    public void SetList(List<Depense> depenses) {
         this.lesDonnees = depenses;
     }
 }

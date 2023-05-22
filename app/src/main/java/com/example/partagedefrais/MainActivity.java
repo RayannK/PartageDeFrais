@@ -1,28 +1,23 @@
 package com.example.partagedefrais;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.app.ActionBar;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.example.partagedefrais.adapter.UtilisateurAdapter;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.partagedefrais.adapter.DepenseAdapter;
 import com.example.partagedefrais.dao.DepenseDao;
 import com.example.partagedefrais.dao.UtilisateurDao;
 import com.example.partagedefrais.helper.DataHelper;
@@ -33,20 +28,34 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    /** Objet destiné à faciliter l'accès à la table des utilisateurs */
+    /**
+     * Objet destiné à faciliter l'accès à la table des utilisateurs
+     */
     private UtilisateurDao accesUtilisateur;
 
-    public final static String CLE_RECHERCHE = "com.example.partagedefrais.RECHERCHE";
+    /**
+     * Clé pour l'ajout à l'intent de la liste de recherche
+     */
+    public final static String CLE_RECHERCHE
+            = "com.example.partagedefrais.RECHERCHE";
 
-    /** Objet destiné à faciliter l'accès à la table des dépenses */
+    /**
+     * Objet destiné à faciliter l'accès à la table des dépenses
+     */
     private DepenseDao accesDepense;
     /**
      * Element permettant d'afficher la liste des photos
      */
     private RecyclerView utilisateurRecyclerView;
 
+    /**
+     * adptateur contenant la liste des dépenses
+     */
+    private DepenseAdapter adaptateur;
 
-    private UtilisateurAdapter adaptateur;
+    /**
+     * liste de toutes les dépenses
+     */
     private ArrayList<Depense> listeDepense;
 
     @Override
@@ -57,8 +66,12 @@ public class MainActivity extends AppCompatActivity {
         utilisateurRecyclerView = findViewById(R.id.recycler_utilisateur);
 
         initialiseDatas();
+        /* change sur la vue pour initialiser les utilisateur
+         * ferme cette vue (afin de ne pas pouvoir y retourner dessus)
+         */
         if (accesUtilisateur.getAll().size() <= 0) {
-            Intent myIntent = new Intent(MainActivity.this, ResetActivity.class);
+            Intent myIntent = new Intent(MainActivity.this,
+                                         ResetActivity.class);
             MainActivity.this.startActivity(myIntent);
             finish();
         }
@@ -67,7 +80,8 @@ public class MainActivity extends AppCompatActivity {
          * On crée un gestionnaire de layout linéaire, et on l'associe à la
          * liste de type RecyclerView
          */
-        LinearLayoutManager gestionnaireLineaire = new LinearLayoutManager(this);
+        LinearLayoutManager gestionnaireLineaire = new LinearLayoutManager(
+                this);
         utilisateurRecyclerView.setLayoutManager(gestionnaireLineaire);
 
         /*
@@ -75,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
          * l'affichage des instances de type PhotoParis en tant que item de la liste.
          * Cet adapatateur est associé au RecyclerView
          */
-        adaptateur = new UtilisateurAdapter(listeDepense);
+        adaptateur = new DepenseAdapter(listeDepense);
         utilisateurRecyclerView.setAdapter(adaptateur);
     }
 
@@ -83,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
      * Méthode pour initialiser la liste des photos et des textes
      */
     private void initialiseDatas() {
+        // récupère les DAO et les ouvres
         accesUtilisateur = UtilisateurDao.getInstance(this);
         accesUtilisateur.open();
 
@@ -94,11 +109,11 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onDestroy() {
+        // ferme les DAO avant la fermeture de l'application
         accesUtilisateur.close();
         accesDepense.close();
         super.onDestroy();
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -128,7 +143,6 @@ public class MainActivity extends AppCompatActivity {
             case R.id.option_reset:
                 resetApplication();
                 break;
-
         }
 
         return super.onOptionsItemSelected(item);
@@ -141,7 +155,8 @@ public class MainActivity extends AppCompatActivity {
     private void saisirRechercherMot() {
 
         // on désérialise le layout qui est associé à la boîte de saisie d'un pays
-        final View boiteSaisie = getLayoutInflater().inflate(R.layout.saisi_nom_recherche, null);
+        final View boiteSaisie = getLayoutInflater().inflate(
+                R.layout.saisi_nom_recherche, null);
 
         /*
          * Création d'une boîte de dialogue pour saisir un aliment
@@ -149,7 +164,8 @@ public class MainActivity extends AppCompatActivity {
         new AlertDialog.Builder(this)
                 .setTitle(getResources().getString(R.string.titre_Recherche))
                 .setView(boiteSaisie)
-                .setPositiveButton(getResources().getString(R.string.bouton_positif),
+                .setPositiveButton(
+                        getResources().getString(R.string.bouton_positif),
                         new DialogInterface.OnClickListener() {
 
                             // méthode invoquée lorsque l'utilisateur validera la saisie
@@ -158,13 +174,15 @@ public class MainActivity extends AppCompatActivity {
                                 String motSaisi;
                                 // on récupère un accès sur les zones de saisies de la boîte
                                 EditText motRecherche =
-                                        boiteSaisie.findViewById(R.id.saisi_mot_recherche);
-                                motSaisi = DataHelper.getString(motRecherche) ;
+                                        boiteSaisie.findViewById(
+                                                R.id.saisi_mot_recherche);
+                                motSaisi = DataHelper.getString(motRecherche);
                                 // pour afficher le résultat de la recherche
                                 rechercheDepense(motSaisi);
                             }
                         })
-                .setNegativeButton(getResources().getString(R.string.bouton_negatif), null)
+                .setNegativeButton(
+                        getResources().getString(R.string.bouton_negatif), null)
                 .show();
     }
 
@@ -175,14 +193,19 @@ public class MainActivity extends AppCompatActivity {
     private void saisirDepense() {
 
         // on désérialise le layout qui est associé à la boîte de saisie d'un pays
-        final View boiteSaisie = getLayoutInflater().inflate(R.layout.ajout_depense, null);
-        Spinner spinner = (Spinner) boiteSaisie.findViewById(R.id.search_user_spinner);
+        final View boiteSaisie = getLayoutInflater().inflate(
+                R.layout.ajout_depense, null);
+        Spinner spinner = (Spinner) boiteSaisie.findViewById(
+                R.id.search_user_spinner);
         ArrayList<String> users = new ArrayList<>();
-        for (Utilisateur user: accesUtilisateur.getAll()) {
+        for (Utilisateur user : accesUtilisateur.getAll()) {
             users.add(user.getPrenom());
         }
-        ArrayAdapter<String> adaptateur = new ArrayAdapter<String>(this.getApplicationContext(), android.R.layout.simple_spinner_item, users);
-        adaptateur.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<String> adaptateur = new ArrayAdapter<String>(
+                this.getApplicationContext(),
+                android.R.layout.simple_spinner_item, users);
+        adaptateur.setDropDownViewResource(
+                android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adaptateur);
 
         /*
@@ -191,38 +214,48 @@ public class MainActivity extends AppCompatActivity {
         new AlertDialog.Builder(this)
                 .setTitle(getResources().getString(R.string.titre_Ajout))
                 .setView(boiteSaisie)
-                .setPositiveButton(getResources().getString(R.string.bouton_positif),
+                .setPositiveButton(
+                        getResources().getString(R.string.bouton_positif),
                         new DialogInterface.OnClickListener() {
 
                             // méthode invoquée lorsque l'utilisateur validera la saisie
                             public void onClick(DialogInterface dialog,
                                                 int leBouton) {
-                                String UtilisateurSaisi =  spinner.getSelectedItem().toString();
+                                // on récupère le nom de l'utilisateur sélectionner
+                                String UtilisateurSaisi
+                                        = spinner.getSelectedItem().toString();
 
                                 String NomDepenseSaisi;
                                 // on récupère un accès sur les zones de saisies de la boîte
                                 EditText nomDepense =
-                                        boiteSaisie.findViewById(R.id.saisi_nom_depense);
-                                NomDepenseSaisi = DataHelper.getString(nomDepense) ;
+                                        boiteSaisie.findViewById(
+                                                R.id.saisi_nom_depense);
+                                NomDepenseSaisi = DataHelper.getString(
+                                        nomDepense);
 
                                 String MontantDepenseSaisi;
                                 // on récupère un accès sur les zones de saisies de la boîte
                                 EditText montantDepense =
-                                        boiteSaisie.findViewById(R.id.saisi_montant_depense);
-                                MontantDepenseSaisi = DataHelper.getString(montantDepense) ;
+                                        boiteSaisie.findViewById(
+                                                R.id.saisi_montant_depense);
+                                MontantDepenseSaisi = DataHelper.getString(
+                                        montantDepense);
 
                                 // pour afficher le résultat de la recherche
-                                ajoutDepense(UtilisateurSaisi,NomDepenseSaisi,MontantDepenseSaisi);
+                                ajoutDepense(UtilisateurSaisi, NomDepenseSaisi,
+                                             MontantDepenseSaisi);
                             }
                         })
-                .setNegativeButton(getResources().getString(R.string.bouton_negatif), null)
+                .setNegativeButton(
+                        getResources().getString(R.string.bouton_negatif), null)
                 .show();
     }
 
-    public void resetApplication()
-    {
-//        ArrayList<Utilisateur> listUtilisateur = accesUtilisateur.getAll();
-
+    /**
+     * Vide la base de donnée et force la transition sur la vue
+     * d'initialisation des utilisateurs
+     */
+    public void resetApplication() {
         accesDepense.deleteAll();
 
         Intent myIntent = new Intent(MainActivity.this, ResetActivity.class);
@@ -236,22 +269,23 @@ public class MainActivity extends AppCompatActivity {
      * @param nomDepense
      * @param montantDepense
      */
-    public void ajoutDepense(String prenomUtilisateur, String nomDepense, String montantDepense)
-    {
-        if (prenomUtilisateur.equals("") || nomDepense.equals("") || montantDepense.equals(""))
-        {
-            Toast.makeText(this, "Les informations saisies ne sont pas valide", Toast.LENGTH_SHORT).show();
-        }
-        else
-        {
+    public void ajoutDepense(String prenomUtilisateur, String nomDepense,
+                             String montantDepense) {
+        if (prenomUtilisateur.equals("") || nomDepense.equals("") ||
+            montantDepense.equals("")) {
+            Toast.makeText(this, "Les informations saisies ne sont pas valide",
+                           Toast.LENGTH_SHORT).show();
+        } else {
             Utilisateur utilisateur = accesUtilisateur.get(prenomUtilisateur);
 
-            Depense depense = new Depense(0,utilisateur, nomDepense, Double.parseDouble(montantDepense));
+            Depense depense = new Depense(0, utilisateur, nomDepense,
+                                          Double.parseDouble(montantDepense));
 
             accesDepense.insert(depense, utilisateur.getId());
 
             adaptateur.SetList(accesDepense.getAll());
-            Toast.makeText(this, "Nouvelle dépense enregistré", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Nouvelle dépense enregistré",
+                           Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -259,31 +293,29 @@ public class MainActivity extends AppCompatActivity {
      * Controle du paramettre puis recherche des dépenses qui contient le mot recherché dans leur libéllé
      * @param motRechercher
      */
-    public void rechercheDepense(String motRechercher)
-    {
-        if (motRechercher.equals(""))
-        {
-            Toast.makeText(this, "Le mot saisi n'est pas valide", Toast.LENGTH_SHORT).show();
-        }
-        else
-        {
-            ArrayList<Depense> listDepense =  accesDepense.getAll();
+    public void rechercheDepense(String motRechercher) {
+        if (DataHelper.isStringEmptyOrNull(motRechercher)) {
+            Toast.makeText(this, "Le mot saisi n'est pas valide",
+                           Toast.LENGTH_SHORT).show();
+        } else {
+            ArrayList<Depense> listDepense = accesDepense.getAll();
 
             ArrayList<Long> listeIdDepenseMot = new ArrayList<>();
 
-            for (Depense depense: listDepense) {
-                if (depense.getNom().contains(motRechercher))
-                {
+            for (Depense depense : listDepense) {
+                if (depense.getNom().toLowerCase()
+                           .contains(motRechercher.toLowerCase())) {
                     listeIdDepenseMot.add(depense.getId());
                 }
             }
 
-            if (!listeIdDepenseMot.isEmpty())
-            {
+            if (!listeIdDepenseMot.isEmpty()) {
                 AfficherResultat(listeIdDepenseMot);
+            } else {
+                Toast.makeText(this,
+                               "Aucune dépense ne contient le mot recherché",
+                               Toast.LENGTH_SHORT).show();
             }
-
-            Toast.makeText(this, "Aucune dépense ne contient le mot recherché", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -291,19 +323,17 @@ public class MainActivity extends AppCompatActivity {
      * Création d'une nouvelle activité pour afficher le résultat de la recherche
      * @param listeDepense
      */
-    public void AfficherResultat(ArrayList<Long> listeDepense)
-    {
+    public void AfficherResultat(ArrayList<Long> listeDepense) {
         Intent intention =
                 new Intent(MainActivity.this, RechercheActivity.class);
 
         long[] tabId = new long[listeDepense.size()];
 
-        for (int i =0; i < listeDepense.size(); i++)
-        {
+        for (int i = 0; i < listeDepense.size(); i++) {
             tabId[i] = listeDepense.get(i);
         }
 
-        intention.putExtra(CLE_RECHERCHE,tabId);
+        intention.putExtra(CLE_RECHERCHE, tabId);
 
         MainActivity.this.startActivity(intention);
     }
@@ -311,8 +341,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Création d'une nouvelle activité pour afficher le bilan des dépenses
      */
-    public void AfficherBilan()
-    {
+    public void AfficherBilan() {
         Intent intention =
                 new Intent(MainActivity.this, BilanActivity.class);
 

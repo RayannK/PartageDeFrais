@@ -8,21 +8,20 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
-import com.example.partagedefrais.model.Depense;
-
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Objet métier représentant un Utilisateur de l'application
  * @author rayann.karon
  */
 public class Utilisateur implements Parcelable {
 
-    /** Identifiant de l'utilisateur dans la table qui le contient */
+    /**
+     * Identifiant de l'utilisateur dans la table qui le contient
+     */
     private final long id;
 
-    /** Prénom de l'utilisateur ayant effectuer la dépense */
+    /**
+     * Prénom de l'utilisateur ayant effectuer la dépense
+     */
     private String prenom;
 
     /**
@@ -36,7 +35,7 @@ public class Utilisateur implements Parcelable {
 
     /**
      * Initialisation d'un Utilisateur
-     * @param id identifiant de l'utilisateur dans la table qui le contient
+     * @param id     identifiant de l'utilisateur dans la table qui le contient
      * @param prenom prénom de l'utilisateur ayant effectuer la dépense
      */
     public Utilisateur(long id, String prenom) {
@@ -49,7 +48,8 @@ public class Utilisateur implements Parcelable {
         prenom = in.readString();
     }
 
-    public static final Creator<Utilisateur> CREATOR = new Creator<Utilisateur>() {
+    public static final Creator<Utilisateur> CREATOR
+            = new Creator<Utilisateur>() {
         @Override
         public Utilisateur createFromParcel(Parcel in) {
             return new Utilisateur(in);

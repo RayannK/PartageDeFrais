@@ -9,7 +9,6 @@ import java.text.DecimalFormat;
 
 /**
  * classe contenant des methodes d'aides
- *
  * @author rayann.karon
  */
 public class DataHelper {
@@ -21,7 +20,6 @@ public class DataHelper {
 
     /**
      * extrait une chaine de caractère d'un editText
-     *
      * @param edit EditText à extraire
      * @return la chaine de caratère extraite
      */
@@ -31,7 +29,6 @@ public class DataHelper {
 
     /**
      * extrait un int d'un editText
-     *
      * @param edit EditText à extraire
      * @return l'int extrait
      * @throws NumberFormatException si la string ne contient pas d'entier à parser
@@ -46,7 +43,6 @@ public class DataHelper {
 
     /**
      * Vérifie si une chaine de charactère est vide ou null
-     *
      * @param toCheck chaine de charactère a analyser
      * @return true si vide ou null sinon faux
      */
@@ -56,7 +52,6 @@ public class DataHelper {
 
     /**
      * Format un double avec 2 digit
-     *
      * @param value valeur du double à formater
      * @return double  formater
      */

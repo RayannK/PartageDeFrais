@@ -4,10 +4,11 @@
 
 package com.example.partagedefrais.model;
 
+import com.example.partagedefrais.helper.DataHelper;
+
 /**
- *
- *  Classe objet représentant une dépense réalisé
- *  Depense.java 05/04
+ * Classe objet représentant une dépense réalisé
+ * Depense.java 05/04
  * @author clement.bonaz
  */
 public class Depense {
@@ -43,11 +44,12 @@ public class Depense {
 
     /**
      * Initialisation d'une dépense
-     * @param id clé primaire de la dépense
-     * @param nom nom de la dépense
+     * @param id      clé primaire de la dépense
+     * @param nom     nom de la dépense
      * @param montant somme de la dépense
      */
-    public Depense(long id, Utilisateur utilisateur, String nom, double montant) {
+    public Depense(long id, Utilisateur utilisateur, String nom,
+                   double montant) {
         this.id = id;
         this.utilisateur = utilisateur;
         this.nom = nom;
@@ -98,6 +100,7 @@ public class Depense {
 
     @Override
     public String toString() {
-        return nom + " : " + montant + "€";
+        return utilisateur.getPrenom() + " " + nom + " : " +
+               DataHelper.formatDouble(montant) + "€";
     }
 }
