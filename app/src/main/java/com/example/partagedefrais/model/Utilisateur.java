@@ -3,6 +3,11 @@
  */
 package com.example.partagedefrais.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+
 import com.example.partagedefrais.model.Depense;
 
 import java.util.ArrayList;
@@ -12,7 +17,7 @@ import java.util.List;
  * Objet métier représentant un Utilisateur de l'application
  * @author rayann.karon
  */
-public class Utilisateur {
+public class Utilisateur implements Parcelable {
 
     /** Identifiant de l'utilisateur dans la table qui le contient */
     private final long id;
@@ -38,6 +43,24 @@ public class Utilisateur {
         this.id = id;
         this.prenom = prenom;
     }
+
+    protected Utilisateur(Parcel in) {
+        id = in.readLong();
+        prenom = in.readString();
+    }
+
+    public static final Creator<Utilisateur> CREATOR = new Creator<Utilisateur>() {
+        @Override
+        public Utilisateur createFromParcel(Parcel in) {
+            return new Utilisateur(in);
+        }
+
+        @Override
+        public Utilisateur[] newArray(int size) {
+            return new Utilisateur[size];
+        }
+    };
+
     /**
      * @return l'identifiant de l'utilisateur dans la table
      */
@@ -58,5 +81,16 @@ public class Utilisateur {
      */
     public void setPrenom(String prenom) {
         this.prenom = prenom;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeString(prenom);
     }
 }

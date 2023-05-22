@@ -41,7 +41,15 @@ public class ResetActivity extends AppCompatActivity implements View.OnClickList
     private LinearLayout viewAjout;
     private LinearLayout viewCreer;
     private int numUtilisateur;
-    private int currentNumUtilisateur;
+    private boolean editState;
+
+    private List<Utilisateur> addingUtilisateur;
+
+    private final String CLE_numUtilisateur = "numUtilisateur";
+    private final String CLE_editNombreUtilisateur = "editNombreUtilisateur";
+    private final String CLE_editNomUtilisateur = "editNomUtilisateur";
+    private final String CLE_addingUtilisateur = "addingUtilisateur";
+    private final String CLE_editState = "editState";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +57,7 @@ public class ResetActivity extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_reset);
 
         numUtilisateur = 0;
+        addingUtilisateur = new ArrayList<>();
 
         editNombreUtilisateur = findViewById(R.id.reset_saisie_nombre_utilisateur);
         editNomUtilisateur = findViewById(R.id.reset_saisie_nom_utilisateur);
@@ -65,46 +74,80 @@ public class ResetActivity extends AppCompatActivity implements View.OnClickList
         btnResetCreer.setOnClickListener(this);
         btnResetAjouter.setOnClickListener(this);
         btnResetAnnuler.setOnClickListener(this);
+
+        if (savedInstanceState != null) {
+            numUtilisateur = savedInstanceState.getInt(CLE_numUtilisateur);
+            editNombreUtilisateur.setText(savedInstanceState.getString(CLE_editNombreUtilisateur));
+            editNomUtilisateur.setText(savedInstanceState.getString(CLE_editNomUtilisateur));
+            addingUtilisateur= savedInstanceState.getParcelableArrayList(CLE_addingUtilisateur);
+            switchMode(savedInstanceState.getBoolean(CLE_editState));
+        }
+
+        textNomUtilisateur.setText(getString(R.string.reset_user) + (addingUtilisateur.size()+1));
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_reset_creer:
-                int nbUtilisateur = DataHelper.getInt(editNombreUtilisateur);
-                if (nbUtilisateur <= 0) {
+                numUtilisateur = DataHelper.getInt(editNombreUtilisateur);
+                if (numUtilisateur <= 0) {
                     break;
                 }
-                viewAjout.setVisibility(View.VISIBLE);
-                viewCreer.setVisibility(View.INVISIBLE);
-                numUtilisateur = nbUtilisateur;
-                currentNumUtilisateur = 1;
-                textNomUtilisateur.setText(getString(R.string.reset_user) + currentNumUtilisateur);
+                switchMode(true);
+                textNomUtilisateur.setText(getString(R.string.reset_user) + (addingUtilisateur.size()+1));
                 break;
             case R.id.btn_reset_ajouter:
                 String nomUser = DataHelper.getString(editNomUtilisateur);
                 if (!DataHelper.isStringEmptyOrNull(nomUser)) {
+                    addingUtilisateur.add(new Utilisateur(0,nomUser));
+
+                    editNomUtilisateur.setText("");
+                }
+                if (addingUtilisateur.size() >= numUtilisateur) {
                     UtilisateurDao accesUtilisateur = UtilisateurDao.getInstance(this);
                     accesUtilisateur.open();
 
-                    accesUtilisateur.insert(new Utilisateur(0,nomUser));
+                    for (Utilisateur utilisateur :addingUtilisateur ) {
+                        accesUtilisateur.insert(utilisateur);
+                    }
 
                     accesUtilisateur.close();
-
-                    currentNumUtilisateur++;
-                    editNomUtilisateur.setText("");
-                }
-                if (currentNumUtilisateur > numUtilisateur) {
                     Intent myIntent = new Intent(ResetActivity.this, MainActivity.class);
                     ResetActivity.this.startActivity(myIntent);
                     finish();
                 }
-                textNomUtilisateur.setText(getString(R.string.reset_user) + currentNumUtilisateur);
+                textNomUtilisateur.setText(getString(R.string.reset_user) + (addingUtilisateur.size()+1));
                 break;
             case R.id.btn_reset_annuler:
-                viewAjout.setVisibility(View.INVISIBLE);
-                viewCreer.setVisibility(View.VISIBLE);
+                addingUtilisateur.clear();
+                switchMode(false);
                 break;
         }
+    }
+
+    /**
+     * Change le mode entre saisie du nombre ou saisie du nom
+     * @param newState true si en mode saisie du nom sinon false
+     */
+    private void switchMode(Boolean newState) {
+        editState = newState;
+        if (editState) {
+            viewAjout.setVisibility(View.VISIBLE);
+            viewCreer.setVisibility(View.INVISIBLE);
+        } else {
+            viewAjout.setVisibility(View.INVISIBLE);
+            viewCreer.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle etat) {
+        etat.putInt(CLE_numUtilisateur, numUtilisateur);
+        etat.putString(CLE_editNombreUtilisateur, DataHelper.getString(editNombreUtilisateur));
+        etat.putString(CLE_editNomUtilisateur, DataHelper.getString(editNomUtilisateur));
+        etat.putParcelableArrayList(CLE_addingUtilisateur, new ArrayList<Utilisateur>(addingUtilisateur));
+        etat.putBoolean(CLE_editState, editState);
+        super.onSaveInstanceState(etat);
     }
 }

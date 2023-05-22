@@ -267,7 +267,7 @@ public class MainActivity extends AppCompatActivity {
         }
         else
         {
-            ArrayList<Depense> listDepense =  DepenseDao.getInstance(this).getAll();
+            ArrayList<Depense> listDepense =  accesDepense.getAll();
 
             ArrayList<Long> listeIdDepenseMot = new ArrayList<>();
 
